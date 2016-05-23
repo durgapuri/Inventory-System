@@ -1,27 +1,28 @@
-
-//package javaapplication2;
- 
 import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.event.*;
 import java.sql.*;
+
 import RetailShopPackage.*;
-import AdminPackage.*;
 import ManagerPackage.*;
+import AdminPackage.*;
 
 public class login {
     
     JFrame jfrm;
     JPanel jpane;
     JLabel empidLab;
-    JTextField  empidText;
+    private JTextField  empidText;
     JLabel passLab;
-    JTextField passText;
+    private JTextField passText;
     JLabel role;
     JComboBox jcom;
     JButton loginbutton;
+    String x;
     
+    String DBDriver="net.ucanaccess.jdbc.UcanaccessDriver";
+    String DBSource="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+    Connection cn;
     
     public login(){
     
@@ -30,11 +31,23 @@ public class login {
     jfrm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     jfrm.setVisible(true);
     
-    
-    
-    placeComponents();
-    
-    
+    try{
+        Class.forName(DBDriver);
+        cn=DriverManager.getConnection(DBSource);
+        System.out.println("Connected Successfully");
+        placeComponents();
+        
+    }
+    catch(ClassNotFoundException e){
+        System.err.println("Failed to load driver");
+        System.out.println(e);
+        System.exit(1);
+    }
+    catch(SQLException e){
+        System.err.println("Unnable to connect");
+        System.out.println(e);
+        System.exit(1);
+    }
 }
     public void placeComponents(){
         
@@ -48,10 +61,6 @@ public class login {
         passwordComponent(jpane,gb);
         roleComponent(jpane,gb);
         loginComponent(jpane,gb);
-        RetailShopClass rs=new RetailShopClass();
-        AdminClass ac=new AdminClass();
-        ManagerClass mc=new ManagerClass();
-        
         
     }
     
@@ -107,43 +116,62 @@ public class login {
         gb.gridy=25;
         jpane.add(loginbutton,gb);
         
-        dbconnection(jpane);
-    }
-    public void dbconnection(JPanel jpane){
         loginbutton.addActionListener(new ActionListener(){
-           public void actionPerformed(ActionEvent ae){
-               try{
-                   Connection cn=null;
-                   Statement st=null;
-                   ResultSet rs=null;
-                   String sql=null;
-                   
-                   String DBDriver="net.ucanaccess.jdbc.UcanaccessDriver";
-                   String DBSource="jdbc:ucanaccess://C:\\Users\\me\\Desktop\\New folder\\database1.accdb";
-                   Class.forName(DBDriver);
-                   cn=DriverManager.getConnection(DBSource);
-                   st=cn.createStatement();
-                   String emp=empidText.getText().trim();
-                   String pass=passText.getText().trim();
-                   
-                   sql="select empId,password from masterEmployee where empId '"+emp+"' and password '"+pass+"'";
-                   rs=st.executeQuery(sql);
-                   int count=0;
-                   while(rs.next()){
-                       count+=1;
-                   }
-                   if(count==1)
-                       JOptionPane.showMessageDialog(null,"Login Successful");
-                   else
-                       JOptionPane.showMessageDialog(null,"Invalid User");
-               }
-               catch(Exception e){
-                   
-               }
-               
-           } 
+          public void actionPerformed(ActionEvent ae){
+             
+              if(loginStatus()==1){
+                  JOptionPane.showMessageDialog(null,"Login Successful");
+                  jfrm.dispose();
+                  String x = jcom.getSelectedItem().toString();
+                  System.out.println(x);
+                  if(x=="Manager"){
+                  ManagerClass mgcls=new ManagerClass();
+              }
+                  if(x=="Admin"){
+                      AdminClass admcls=new AdminClass();
+                  }
+                  if(x=="RetailShopEmployee"){
+                      RetailShopClass rsemp=new RetailShopClass();
+                  }
+              }
+              else{
+                  JOptionPane.showMessageDialog(null,"Invalid user");
+                  jfrm.dispose();
+                  new login();
+                  
+              }
+          }  
         });
     }
+    
+        public int loginStatus(){
+            
+           try{
+                Statement st=null;
+                ResultSet rs=null;
+                String sql=null;
+                int count=0;
+                   
+                st=cn.createStatement();
+                String emp=empidText.getText().trim();
+                String pass=passText.getText().trim();
+                String x = jcom.getSelectedItem().toString();
+                System.out.println(x);
+                
+                sql="select empId,password from masterEmployee where empId= '"+emp+"' and password= '"+pass+"' and role= '"+x+"'";
+                rs=st.executeQuery(sql);
+                while(rs.next()){
+                    count+=1;
+                }
+                return count;
+            }
+                catch(Exception e){
+                    System.out.print(e);
+                    return 0;
+               }
+        } 
+        
+    
 
     public static void main(String []args){
         SwingUtilities.invokeLater(new Runnable(){

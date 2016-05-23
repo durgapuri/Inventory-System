@@ -1,6 +1,15 @@
 
 package AdminPackage;
+import ItemPackage.AddItemClass;
+import ItemPackage.ViewItemClass;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
+import StockPackage.*;
+import BillPackage.*;
+import EmployeePackage.*;
+import CustomerPackage.*;
+import SupplierPackage.*;
 
 public class AdminClass {
     JFrame jfrm=new JFrame("Admin");
@@ -35,6 +44,12 @@ public class AdminClass {
         menuEmployee.add(updateEmployee);
         JMenuItem viewEmployee=new JMenuItem("View Employee Details");
         menuEmployee.add(viewEmployee);
+        viewEmployee.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+               new ViewEmployeeClass(); 
+               
+        }});
     }
     public void creatingCustomerMenu()
     {
@@ -42,12 +57,24 @@ public class AdminClass {
         jmb.add(menuCust);
         JMenuItem addCust=new JMenuItem("Add Customer");
         menuCust.add(addCust);
+        addCust.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+               new AddCustomerClass(); 
+               
+        }});
         JMenuItem removeCust=new JMenuItem("Remove Customer");
         menuCust.add(removeCust);
         JMenuItem updateCust=new JMenuItem("Update Customer");
         menuCust.add(updateCust);
         JMenuItem viewCust=new JMenuItem("View Customer");
         menuCust.add(viewCust);
+        viewCust.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+               new ViewCustomerClass(); 
+               
+        }});
     }
     public void creatingSupplierMenu()
     {
@@ -55,12 +82,24 @@ public class AdminClass {
         jmb.add(menuSup);
         JMenuItem addSup=new JMenuItem("Add Supplier");
         menuSup.add(addSup);
+        addSup.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+               new AddSupplier(); 
+               
+        }});
         JMenuItem removeSup=new JMenuItem("Remove Supplier");
         menuSup.add(removeSup);
         JMenuItem updateSup=new JMenuItem("Update Supplier");
         menuSup.add(updateSup);
         JMenuItem viewSup=new JMenuItem("View Suppliers");
         menuSup.add(viewSup);
+        viewSup.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+               new ViewSupplierClass(); 
+               
+        }});
     }
     public void creatingItemMenu()
     {
@@ -68,12 +107,24 @@ public class AdminClass {
         jmb.add(menuItem);
         JMenuItem addItem=new JMenuItem("Add Item");
         menuItem.add(addItem);
+        addItem.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+               new AddItemClass(); 
+               
+        }});
         JMenuItem removeItem=new JMenuItem("Remove Item");
         menuItem.add(removeItem);
         JMenuItem updateItem=new JMenuItem("Update Item");
         menuItem.add(updateItem);
         JMenuItem viewItem=new JMenuItem("View Item");
         menuItem.add(viewItem);
+        viewItem.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+               new ViewItemClass(); 
+               
+        }});
     }
     public void creatingStockMenu()
     {
@@ -81,6 +132,12 @@ public class AdminClass {
         jmb.add(menuStock);
         JMenuItem viewStock=new JMenuItem("View Stock");
         menuStock.add(viewStock);
+        viewStock.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+               new ViewStockClass(); 
+               
+        }});
     }
     public void creatingBillMenu()
     {
@@ -90,6 +147,12 @@ public class AdminClass {
         menuBill.add(createBill);
         JMenuItem viewBill=new JMenuItem("View Bill");
         menuBill.add(viewBill);
+        viewBill.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+               new ViewBillClass(); 
+               
+        }});
     }
     public void creatingSalesMenu()
     {
@@ -98,5 +161,8 @@ public class AdminClass {
         JMenuItem viewSales=new JMenuItem("View Sales");
         menuSales.add(viewSales);
     }
-    
+    /* public static void main(String args[])
+    {
+        new AdminClass();
+    }*/
 }
