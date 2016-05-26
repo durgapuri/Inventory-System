@@ -2,7 +2,8 @@ import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
 import java.sql.*;
-
+import java.text.SimpleDateFormat;
+import java.util.*;
 import RetailShopPackage.*;
 import ManagerPackage.*;
 import AdminPackage.*;
@@ -16,6 +17,7 @@ public class login {
     JLabel passLab;
     private JTextField passText;
     JLabel role;
+    String empIdpass;
     JComboBox jcom;
     JButton loginbutton;
     String x;
@@ -44,10 +46,11 @@ public class login {
         System.exit(1);
     }
     catch(SQLException e){
-        System.err.println("Unnable to connect");
+        System.err.println("Unable to connect");
         System.out.println(e);
         System.exit(1);
     }
+    
 }
     public void placeComponents(){
         
@@ -125,13 +128,13 @@ public class login {
                   String x = jcom.getSelectedItem().toString();
                   System.out.println(x);
                   if(x=="Manager"){
-                  ManagerClass mgcls=new ManagerClass();
+                  ManagerClass mgcls=new ManagerClass(empIdpass);
               }
                   if(x=="Admin"){
-                      AdminClass admcls=new AdminClass();
+                      AdminClass admcls=new AdminClass(empIdpass);
                   }
                   if(x=="RetailShopEmployee"){
-                      RetailShopClass rsemp=new RetailShopClass();
+                      RetailShopClass rsemp=new RetailShopClass(empIdpass);
                   }
               }
               else{
@@ -163,6 +166,7 @@ public class login {
                 while(rs.next()){
                     count+=1;
                 }
+                empIdpass=emp;
                 return count;
             }
                 catch(Exception e){

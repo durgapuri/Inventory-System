@@ -105,27 +105,10 @@ public class AddCustomerClass {
             String freq=textFreq.getText().trim();
             System.out.println("values taken");
             sql="INSERT INTO `customer`(phoneNo,cusName,address,emailId,recentVisitDate,frequencyOfVisit) VALUES ('"+phnno+"','"+name+"','"+addr+"','"+email+"','"+visit+"','"+freq+"')";
-            //sql = "INSERT INTO 'item'(itemName,itemType,itemCompanyName) VALUE ('"+itemName+"','"+itemType+"','"+itemCompanyName+"')";
+            
             System.out.println(sql);
             stm.executeUpdate(sql);
-            //rs.close();
-           /* String sql1="SELECT i.itemId FROM item as i WHERE i.itemName='"+itemName+"'";
-            rs=stm.executeQuery(sql1);
-            System.out.println("exception");
-            while(rs.next())
-            { int in=rs.getInt("itemId");
-              System.out.println(in);
-            
-            
-            sql = "INSERT INTO `stock`(itemId,itemStock,itemPrice) VALUES ("+in+","+itemStock+","+itemPrice+")";
-            System.out.println(sql);
-            
-            stm.executeUpdate(sql);
-            System.out.println("error");
-            
-            //rs.close();
-            }
-            rs.close();*/
+           
             return 1;
         }
         catch(Exception e)

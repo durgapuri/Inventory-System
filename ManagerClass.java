@@ -9,12 +9,43 @@ import SupplierPackage.*;
 import ItemPackage.*;
 import StockPackage.*;
 import BillPackage.*;
+import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class ManagerClass {
+    String driver="net.ucanaccess.jdbc.UcanaccessDriver";
+    String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+    String date;
+    Connection con=null;
+    ResultSet rs=null;
+    Statement stm=null;
     JFrame jfrm=new JFrame("Manager");
     JMenuBar jmb=new JMenuBar();
-    public ManagerClass()
-    {   settingFrameBoundaries();
+    String empIdreceived;
+    JLabel jbl=new JLabel();
+    JLabel jbl1=new JLabel("Last Access Time:");
+    public ManagerClass(String empIdreceived)
+    {   this.empIdreceived=empIdreceived;
+        try
+    {
+            Class.forName(driver);
+            con=DriverManager.getConnection(source);
+            System.out.println("connected successfully");
+            
+    }
+        catch(ClassNotFoundException e)
+        {   System.err.println("Failed To Load Driver");
+            System.out.println(e);
+            System.exit(1);
+        }
+        catch(SQLException e)
+        {   System.err.println("Unable To Connect");
+            System.out.println(e);
+            System.exit(1);
+        }
+        settingFrameBoundaries();
+        displayDateTime();
         creatingEmployeeMenu();
         creatingCustomerMenu();
         creatingSupplierMenu();
@@ -27,7 +58,7 @@ public class ManagerClass {
     }
     public void settingFrameBoundaries()
     {
-        jfrm.setSize(500,300);
+        jfrm.setSize(550,500);
         jfrm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jfrm.setLayout(null);
         jfrm.setLocationRelativeTo(null);
@@ -59,8 +90,20 @@ public class ManagerClass {
         }});
         JMenuItem removeCust=new JMenuItem("Remove Customer");
         menuCust.add(removeCust);
+        removeCust.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+               new DeleteCustomerClass(); 
+               
+        }});
         JMenuItem updateCust=new JMenuItem("Update Customer");
         menuCust.add(updateCust);
+        updateCust.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+               new UpdateCustomerClass(); 
+               
+        }});
         JMenuItem viewCust=new JMenuItem("View Customer");
         menuCust.add(viewCust);
         viewCust.addActionListener(new ActionListener(){
@@ -84,8 +127,20 @@ public class ManagerClass {
         }});
         JMenuItem removeSup=new JMenuItem("Remove Supplier");
         menuSup.add(removeSup);
+        removeSup.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+               new DeleteSupplierClass(); 
+               
+        }});
         JMenuItem updateSup=new JMenuItem("Update Supplier");
         menuSup.add(updateSup);
+        updateSup.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+               new UpdateSupplierClass(); 
+               
+        }});
         JMenuItem viewSup=new JMenuItem("View Suppliers");
         menuSup.add(viewSup);
         viewSup.addActionListener(new ActionListener(){
@@ -109,8 +164,20 @@ public class ManagerClass {
         }});
         JMenuItem removeItem=new JMenuItem("Remove Item");
         menuItem.add(removeItem);
+        removeItem.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+               new DeleteItemClass(); 
+               
+        }});
         JMenuItem updateItem=new JMenuItem("Update Item");
         menuItem.add(updateItem);
+        updateItem.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+               new UpdateItemClass(); 
+               
+        }});
         JMenuItem viewItem=new JMenuItem("View Item");
         menuItem.add(viewItem);
         viewItem.addActionListener(new ActionListener(){
@@ -147,6 +214,38 @@ public class ManagerClass {
                new ViewBillClass(); 
                
         }});
+    }
+    public void displayDateTime()
+    {   try
+        {   System.out.println("entered");
+            stm=con.createStatement();
+            String sql="select lastAccessTime from masterEmployee where empId='"+empIdreceived+"'";
+            rs=stm.executeQuery(sql);
+            while(rs.next())
+            {   System.out.println("getting");
+                date=rs.getString("lastAccessTime");
+            }
+            rs.close();
+            System.out.println(date);
+            jbl.setText(date);
+            jbl.setBounds(410,0, 150, 30);
+            jbl1.setBounds(300,0,200,30);
+            jfrm.add(jbl1);
+            jfrm.add(jbl);
+            System.out.println(date);
+            String timeStamp = new SimpleDateFormat("yyyy/MM/dd_HH:mm:ss").format(Calendar.getInstance().getTime());
+            System.out.println(timeStamp);
+            PreparedStatement ps=con.prepareStatement("Update masterEmployee SET lastAccessTime= ? WHERE empId=? ");
+            ps.setString(1, timeStamp);
+            ps.setString(2,empIdreceived);
+            ps.executeUpdate();
+            
+        }
+        catch(Exception e)
+        {
+           System.out.println(e);
+        }
+        
     }
     public void creatingSalesMenu()
     {

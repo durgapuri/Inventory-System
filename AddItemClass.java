@@ -100,10 +100,10 @@ public class AddItemClass {
             String itemPrice=textItemPrice.getText().trim();
             System.out.println("values taken");
             sql="INSERT INTO `item`(itemName,itemType,itemCompanyName) VALUES ('"+itemName+"','"+itemType+"','"+itemCompanyName+"')";
-            //sql = "INSERT INTO 'item'(itemName,itemType,itemCompanyName) VALUE ('"+itemName+"','"+itemType+"','"+itemCompanyName+"')";
+            
             System.out.println(sql);
             stm.executeUpdate(sql);
-            //rs.close();
+            
             String sql1="SELECT i.itemId FROM item as i WHERE i.itemName='"+itemName+"'";
             rs=stm.executeQuery(sql1);
             System.out.println("exception");
@@ -118,7 +118,7 @@ public class AddItemClass {
             stm.executeUpdate(sql);
             System.out.println("error");
             
-            //rs.close();
+            
             }
             rs.close();
             return 1;

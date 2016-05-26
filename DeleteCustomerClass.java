@@ -1,5 +1,5 @@
 
-package ItemPackage;
+package CustomerPackage;
 import java.sql.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.util.*;
 import javax.swing.table.*;
 
-public class DeleteItemClass {
+public class DeleteCustomerClass {
     String driver="net.ucanaccess.jdbc.UcanaccessDriver";
     String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
     String s;
@@ -16,14 +16,14 @@ public class DeleteItemClass {
     Connection con=null;
     Statement stm=null;
     
-    JFrame jfrm1=new JFrame("Delete Item");
+    JFrame jfrm1=new JFrame("Delete Customer Details");
     JPanel jpan=new JPanel();
-    JLabel itemNameLabel=new JLabel("Item Id");
+    JLabel phoneNoLabel=new JLabel("Phone Number");
     JButton jbn=new JButton("Delete");
     ResultSet rs=null;
     final JComboBox jComboBox1=new JComboBox();
     
-    public DeleteItemClass()
+    public DeleteCustomerClass()
     {   setLayoutBoundaries();
         
          try
@@ -53,13 +53,13 @@ public class DeleteItemClass {
     {   jpan.setLayout(null);
         jfrm1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jfrm1.setSize(700,300);
-        itemNameLabel.setBounds(100,50,100,25);
-        jComboBox1.setBounds(150,50,100,25);
+        phoneNoLabel.setBounds(100,50,100,25);
+        jComboBox1.setBounds(250,50,100,25);
         
         
     }
     public void addComponents()
-    {   jpan.add(itemNameLabel);
+    {   jpan.add(phoneNoLabel);
         jComboBox1.setVisible(true);
         jpan.add(jComboBox1);
         jfrm1.add(jpan);
@@ -72,16 +72,16 @@ public class DeleteItemClass {
         try
         {
             stm=con.createStatement();
-            rs = stm.executeQuery("select itemId from item");
+            rs = stm.executeQuery("select phoneNo from customer");
             while(rs.next()){
             //System.out.println("getting first value");
-            String sc= rs.getString("itemId");
+            String sc= rs.getString("phoneNo");
             System.out.println(sc);
             jComboBox1.addItem(sc);
             
             }
         
-        
+       
         s=String.valueOf(jComboBox1.getSelectedItem());
         
         System.out.println(s);
@@ -101,7 +101,7 @@ public class DeleteItemClass {
 
         try {
 
-            String sql = "Select * from item where itemId='"+s+"'";
+            String sql = "Select * from customer where phoneNo='"+s+"'";
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery( sql );
             ResultSetMetaData md = rs.getMetaData();
@@ -132,7 +132,7 @@ public class DeleteItemClass {
         TableColumn col;
         for (int i = 0; i < table.getColumnCount(); i++) {
                 col = table.getColumnModel().getColumn(i);
-        col.setMaxWidth(200);
+        col.setMaxWidth(300);
         }
         
         
@@ -141,7 +141,7 @@ public class DeleteItemClass {
         scrollPane.setBounds(200,100,900,300);
         table.getTableHeader().setReorderingAllowed(false);
         
-        jpn.setBounds(20,100,500,50);
+        jpn.setBounds(20,100,800,50);
         jpan.add(jpn);
         jbn.setBounds(250,200,80,30);
         jpan.add(jbn);
@@ -154,23 +154,23 @@ public class DeleteItemClass {
                 {   System.out.println("reached query");
                     stm=con.createStatement();
                     
-                    String st="Delete from item where itemId='"+s+"'";
+                    String st="Delete from customer where phoneNo='"+s+"'";
                     stm.executeUpdate(st);
-                    JOptionPane.showMessageDialog(null,"Item Deleted");
-                  
+                    JOptionPane.showMessageDialog(null,"Customer Details Deleted");
+                   
                 }
                 catch(Exception e)
                 {
                     System.out.println(e);
-                    JOptionPane.showMessageDialog(null,"Item not Deleted");
+                    JOptionPane.showMessageDialog(null,"Unable To Delete");
                 }
             }
         
     });
     }
-   /* public static void main(String args[])
+    public static void main(String args[])
     {
-        new DeleteItemClass();
-    }*/
+        new DeleteCustomerClass();
+    }
     
 }

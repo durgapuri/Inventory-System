@@ -1,5 +1,5 @@
 
-package ItemPackage;
+package EmployeePackage;
 import java.sql.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.util.*;
 import javax.swing.table.*;
 
-public class DeleteItemClass {
+public class DeleteEmployeeClass {
     String driver="net.ucanaccess.jdbc.UcanaccessDriver";
     String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
     String s;
@@ -16,14 +16,14 @@ public class DeleteItemClass {
     Connection con=null;
     Statement stm=null;
     
-    JFrame jfrm1=new JFrame("Delete Item");
+    JFrame jfrm1=new JFrame("Delete Employee Details");
     JPanel jpan=new JPanel();
-    JLabel itemNameLabel=new JLabel("Item Id");
+    JLabel itemNameLabel=new JLabel("Employee Id");
     JButton jbn=new JButton("Delete");
     ResultSet rs=null;
     final JComboBox jComboBox1=new JComboBox();
-    
-    public DeleteItemClass()
+   
+    public DeleteEmployeeClass()
     {   setLayoutBoundaries();
         
          try
@@ -53,8 +53,8 @@ public class DeleteItemClass {
     {   jpan.setLayout(null);
         jfrm1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jfrm1.setSize(700,300);
-        itemNameLabel.setBounds(100,50,100,25);
-        jComboBox1.setBounds(150,50,100,25);
+        itemNameLabel.setBounds(100,50,150,25);
+        jComboBox1.setBounds(200,50,100,25);
         
         
     }
@@ -72,10 +72,10 @@ public class DeleteItemClass {
         try
         {
             stm=con.createStatement();
-            rs = stm.executeQuery("select itemId from item");
+            rs = stm.executeQuery("select empId from masterEmployee");
             while(rs.next()){
-            //System.out.println("getting first value");
-            String sc= rs.getString("itemId");
+            
+            String sc= rs.getString("empId");
             System.out.println(sc);
             jComboBox1.addItem(sc);
             
@@ -101,7 +101,7 @@ public class DeleteItemClass {
 
         try {
 
-            String sql = "Select * from item where itemId='"+s+"'";
+            String sql = "Select * from employee where empId='"+s+"'";
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery( sql );
             ResultSetMetaData md = rs.getMetaData();
@@ -154,23 +154,23 @@ public class DeleteItemClass {
                 {   System.out.println("reached query");
                     stm=con.createStatement();
                     
-                    String st="Delete from item where itemId='"+s+"'";
+                    String st="Delete from masterEmployee where empId='"+s+"'";
                     stm.executeUpdate(st);
-                    JOptionPane.showMessageDialog(null,"Item Deleted");
-                  
+                    JOptionPane.showMessageDialog(null,"Employee Details Deleted");
+                   
                 }
                 catch(Exception e)
                 {
                     System.out.println(e);
-                    JOptionPane.showMessageDialog(null,"Item not Deleted");
+                    JOptionPane.showMessageDialog(null,"Unable To Delete");
                 }
             }
         
     });
     }
-   /* public static void main(String args[])
+    public static void main(String args[])
     {
-        new DeleteItemClass();
-    }*/
+        new DeleteEmployeeClass();
+    }
     
 }
