@@ -1,3 +1,7 @@
+package LoginPackage;
+
+
+import LoginPackage.EncDecrptClass;
 import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
@@ -15,25 +19,26 @@ public class login {
     JLabel empidLab;
     private JTextField  empidText;
     JLabel passLab;
-    private JTextField passText;
+    private JPasswordField passText;
     JLabel role;
     String empIdpass;
     JComboBox jcom;
     JButton loginbutton;
+    JButton newUser;
     String x;
     
-    String DBDriver="net.ucanaccess.jdbc.UcanaccessDriver";
-    String DBSource="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+  //  String DBDriver="net.ucanaccess.jdbc.UcanaccessDriver";
+    //String DBSource="jdbc:ucanaccess://C:\\Users\\me\\Desktop\\New folder\\databaseinv.accdb";
     Connection cn;
     
     public login(){
     
-    jfrm=new JFrame("Login: ");
+    jfrm=new JFrame("Login ");
     jfrm.setSize(500,400);
     jfrm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     jfrm.setVisible(true);
-    
-    try{
+    placeComponents();
+    /*try{
         Class.forName(DBDriver);
         cn=DriverManager.getConnection(DBSource);
         System.out.println("Connected Successfully");
@@ -49,7 +54,7 @@ public class login {
         System.err.println("Unable to connect");
         System.out.println(e);
         System.exit(1);
-    }
+    }*/
     
 }
     public void placeComponents(){
@@ -64,6 +69,7 @@ public class login {
         passwordComponent(jpane,gb);
         roleComponent(jpane,gb);
         loginComponent(jpane,gb);
+        newUserComponent(jpane,gb);
         
     }
     
@@ -88,7 +94,7 @@ public class login {
         gb.gridy=10;
         jpane.add(passLab,gb);
         
-        passText=new JTextField();
+        passText=new JPasswordField();
         gb.gridx=8;
         gb.gridy=10;
         passText.setPreferredSize(new Dimension(180,25));
@@ -112,11 +118,27 @@ public class login {
         jpane.add(jcom,gb);
        }
         
+     public void newUserComponent(JPanel jpane,GridBagConstraints gb){
+       
+        newUser=new JButton("Not Registered: Sign-in");
+        gb.gridx=0;
+        gb.gridy=30;
+        jpane.add(newUser,gb);
+        
+        newUser.addActionListener(new ActionListener(){
+          public void actionPerformed(ActionEvent ae){
+             userClass user=new userClass();
+             jfrm.dispose();
+                       }  
+        });
+        
+        
+    }    
     public void loginComponent(JPanel jpane,GridBagConstraints gb){
         
         loginbutton=new JButton("Login");
         gb.gridx=20;
-        gb.gridy=25;
+        gb.gridy=30;
         jpane.add(loginbutton,gb);
         
         loginbutton.addActionListener(new ActionListener(){
@@ -157,11 +179,12 @@ public class login {
                    
                 st=cn.createStatement();
                 String emp=empidText.getText().trim();
-                String pass=passText.getText().trim();
+                String pass = new String(passText.getPassword());
                 String x = jcom.getSelectedItem().toString();
                 System.out.println(x);
                 
-                sql="select empId,password from masterEmployee where empId= '"+emp+"' and password= '"+pass+"' and role= '"+x+"'";
+                String encpass=EncDecrptClass.encrypt(pass);
+                sql="select empId,password from masterEmployee where empId= '"+emp+"' and password= '"+encpass+"' and role= '"+x+"'";
                 rs=st.executeQuery(sql);
                 while(rs.next()){
                     count+=1;
@@ -177,11 +200,11 @@ public class login {
         
     
 
-    public static void main(String []args){
+   /* public static void main(String []args){
         SwingUtilities.invokeLater(new Runnable(){
             public void run(){
                 new login();
             }
         });
-    }
+    }*/
 }
