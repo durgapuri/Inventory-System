@@ -1,28 +1,30 @@
 
 package SupplierPackage;
+
 import java.sql.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
 public class AddSupplier {
-        String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
-    Connection con=null;
-    JFrame jfrm1=new JFrame("Add New Supplier");
-    JPanel jpan=new JPanel();
-    JLabel supNameLabel=new JLabel("Supplier Name");
-    JLabel supAddrLabel=new JLabel("Address");
-    JLabel supContactLabel=new JLabel("Contact No");
-    JTextField textsupName = new JTextField(10);
-    JTextField textsupAddr = new JTextField(10);
-    JTextField textsupContact = new JTextField(10);
-    JButton jbn=new JButton("ADD");
+    //String driver="net.ucanaccess.jdbc.UcanaccessDriver";
+    //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+    private Connection con=null;
+    private JFrame jfrm1=new JFrame("Add New Supplier");
+    private JPanel jpan=new JPanel();
+    private JLabel supNameLabel=new JLabel("Supplier Name");
+    private JLabel supAddrLabel=new JLabel("Address");
+   private JLabel supContactLabel=new JLabel("Contact No");
+    private JTextField textsupName = new JTextField(10);
+    private JTextField textsupAddr = new JTextField(10);
+    private JTextField textsupContact = new JTextField(10);
+    private JButton jbn=new JButton("ADD");
         
-    public AddSupplier()
+    public AddSupplier(Connection con)
     {
-       setLayoutBoundaries(); 
-       try
+        this.con=con;
+        setLayoutBoundaries(); 
+      /* try
     {
             Class.forName(driver);
             con=DriverManager.getConnection(source);
@@ -38,7 +40,7 @@ public class AddSupplier {
         {   System.err.println("Unable To Connect");
             System.out.println(e);
             System.exit(1);
-        }
+        }*/
        addingItemFunction();
        addComponents();
         
@@ -54,15 +56,16 @@ public class AddSupplier {
                 if(ItemAdded()==1)
                 {
                    JOptionPane.showMessageDialog(null,"Supplier Details Added");
-                  
+                  jfrm1.dispose();
                 }
                 else
-               {   JOptionPane.showMessageDialog(null,"Supplier Details Not Added");
+               {  
+                    // JOptionPane.showMessageDialog(null,"Supplier Details Not Added");
                }
             }
              
         });
-         jfrm1.dispose();
+         
     }
     public void setLayoutBoundaries()
     {  
@@ -87,7 +90,16 @@ public class AddSupplier {
             stm=con.createStatement();
             String supName=textsupName.getText().trim();
             String supAddr=textsupAddr.getText().trim();
-            String supContact=textsupContact.getText().trim();
+            String supContact="";
+            
+             if(verifyPhoneNo(textsupContact.getText().trim()) ){
+                   
+                   supContact=textsupContact.getText().trim();
+                   
+            }
+             else{
+                 return 0;
+             }
             System.out.println("values taken");
             sql="INSERT INTO `supplierDetails`(supName,supAddress,supContact) VALUES ('"+supName+"','"+supAddr+"','"+supContact+"')";
             
@@ -102,6 +114,17 @@ public class AddSupplier {
             return 0;
         }
     }
+     boolean verifyPhoneNo(String No){
+	if(!(No.length()==10)){
+            JOptionPane.showMessageDialog(null,"Incorrect Phone No : Phone no must be of 10 digit","Wrong Phone No",JOptionPane.ERROR_MESSAGE);
+            return false;
+	}
+	if(!(No.chars().allMatch( Character::isDigit ))){
+            JOptionPane.showMessageDialog(null,"Incorrect Phone No : Phone no must be only numeric","Wrong Phone No",JOptionPane.ERROR_MESSAGE);
+            return false;
+	}
+	return true;
+}
     public void addComponents()
     {
         jpan.add(supNameLabel);

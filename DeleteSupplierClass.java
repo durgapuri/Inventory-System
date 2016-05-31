@@ -7,9 +7,10 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 import javax.swing.table.*;
+import javax.swing.table.DefaultTableModel.*;
 public class DeleteSupplierClass {
-    String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+    //String driver="net.ucanaccess.jdbc.UcanaccessDriver";
+    //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
     String s;
     int deleted;
     JPanel jpn=new JPanel(new BorderLayout());
@@ -18,15 +19,21 @@ public class DeleteSupplierClass {
     
     JFrame jfrm1=new JFrame("Delete Supplier Details");
     JPanel jpan=new JPanel();
-    JLabel itemNameLabel=new JLabel("Supplier Id");
+    JLabel supNameLabel=new JLabel("Supplier Id");
     JButton jbn=new JButton("Delete");
     ResultSet rs=null;
+      private String [] supDetails= new String[4];
     final JComboBox jComboBox1=new JComboBox();
+     private DefaultTableModel tblModel;
+     private JTable table= new JTable(tblModel);
+    private JScrollPane scrollPane = new JScrollPane(table);
     
-    public DeleteSupplierClass()
-    {   setLayoutBoundaries();
+    public DeleteSupplierClass(Connection con)
+    {   
+        this.con=con;
+        setLayoutBoundaries();
         
-         try
+        /* try
     {
             Class.forName(driver);
             con=DriverManager.getConnection(source);
@@ -42,7 +49,7 @@ public class DeleteSupplierClass {
         {   System.err.println("Unable To Connect");
             System.out.println(e);
             System.exit(1);
-        }
+        }*/
          System.out.println("reached");
          addComponents();
          addingToComboBox();
@@ -50,20 +57,29 @@ public class DeleteSupplierClass {
          
     }
     public void setLayoutBoundaries()
-    {   jpan.setLayout(null);
+    {   
+        jpan.setLayout(null);
         jfrm1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jfrm1.setSize(700,300);
-        itemNameLabel.setBounds(100,50,150,25);
+        supNameLabel.setBounds(100,50,150,25);
         jComboBox1.setBounds(200,50,100,25);
+        jpn.setBounds(50,100,600,50);
+        jbn.setBounds(400,50,100,25);
+        scrollPane.setBounds(200,100,1200,400);
         
         
     }
     public void addComponents()
-    {   jpan.add(itemNameLabel);
+    {   
+        jpan.add(supNameLabel);
         jComboBox1.setVisible(true);
         jpan.add(jComboBox1);
         jfrm1.add(jpan);
-        
+        jpan.add(jpn);
+        jpan.add(jbn);
+        jpn.add(scrollPane);
+        table.getTableHeader().setReorderingAllowed(false);
+        jfrm1.setLocationRelativeTo(null);   // Used it place Jframe on center of screen , you can use it in other modules too
         jfrm1.setVisible(true);
         
     }
@@ -82,82 +98,72 @@ public class DeleteSupplierClass {
             }
         
         
-        s=String.valueOf(jComboBox1.getSelectedItem());
-        
+        //s=String.valueOf(jComboBox1.getSelectedItem());
+        jComboBox1.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae){
+                System.out.println("entered");
+                s=String.valueOf(jComboBox1.getSelectedItem());
+                viewDetailsOfSupplier(s);
+                        
+                table.setModel(tblModel);
+                tblModel.fireTableDataChanged();
+            } 
+        });
         System.out.println(s);
         rs.close();
-        viewDetailsOfItem();
+        
         }
         catch(Exception e)
         {
             System.out.println(e);
         }
         
-    }
-    public void viewDetailsOfItem()
-    {   System.out.println("creating table");
-        Vector columnNames = new Vector();
-        Vector data = new Vector();
-
+    }  private void setColumns() {
+        tblModel.setColumnCount(0);
+        tblModel.addColumn("SUPPLIER Id");
+        tblModel.addColumn("SUPPLIER NAME");
+        
+        tblModel.addColumn("ADDRESS");
+        tblModel.addColumn("PHONE NUMBER");
+       
+       }
+    public void viewDetailsOfSupplier(String s)
+    {  tblModel = (DefaultTableModel) table.getModel();
+        setColumns();
         try {
-
-            String sql = "Select * from supplierDetails where supId='"+s+"'";
+               
+            String sql ="Select * from supplierDetails where supId='"+s+"'"; 
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery( sql );
-            ResultSetMetaData md = rs.getMetaData();
-            int columns = md.getColumnCount();
-            for (int i = 1; i <= columns; i++) {
-                columnNames.addElement( md.getColumnName(i) );
-            }
+                                              
         while (rs.next()) {
-                Vector row = new Vector(columns);
-        for (int i = 1; i <= columns; i++){
-                row.addElement( rs.getObject(i) );
-        }
-        data.addElement( row );
+                                                               
+            tblModel.setRowCount(0);
+            supDetails[0] = rs.getString("supId").trim();
+            supDetails[1] = rs.getString("supName").trim();
+            supDetails[2] = rs.getString("supAddress").trim();
+            supDetails[3] = rs.getString("supContact").trim();
+            tblModel.insertRow(tblModel.getRowCount(),supDetails);
+            
         }
         rs.close();
         stmt.close();
-        }
-        catch(Exception e){
+       }catch(Exception e){
                 System.out.println(e);
-        }
-        JTable table = new JTable(data, columnNames)
-        {
-            public boolean isCellEditable(int row,int cloumns){
-            return false;
-            }
-            
-        };
-        TableColumn col;
-        for (int i = 0; i < table.getColumnCount(); i++) {
-                col = table.getColumnModel().getColumn(i);
-        col.setMaxWidth(200);
-        }
-        
-        //JPanel jp=new JPanel();
-        JScrollPane scrollPane = new JScrollPane(table);
-        jpn.add(scrollPane);
-        scrollPane.setBounds(200,100,900,300);
-        table.getTableHeader().setReorderingAllowed(false);
-        
-        jpn.setBounds(20,100,500,50);
-        jpan.add(jpn);
-        jbn.setBounds(250,200,80,30);
-        jpan.add(jbn);
-    }
+        }}
+   
     public void delete()
     { jbn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             { 
                 try
-                {   System.out.println("reached query");
-                    stm=con.createStatement();
+                {  
                     
+                    stm=con.createStatement();
                     String st="Delete from supplierDetails where supId='"+s+"'";
                     stm.executeUpdate(st);
                     JOptionPane.showMessageDialog(null,"Supplier Details Deleted");
-                   
+                    jfrm1.dispose();
                 }
                 catch(Exception e)
                 {
@@ -168,7 +174,7 @@ public class DeleteSupplierClass {
         
     });
     }
-   /* public static void main(String args[])
+    /*public static void main(String args[])
     {
         new DeleteSupplierClass();
     }*/

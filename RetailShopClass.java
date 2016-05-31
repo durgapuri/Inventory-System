@@ -1,5 +1,6 @@
 
 package RetailShopPackage;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -11,20 +12,21 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class RetailShopClass {
-    ResultSet rs=null;
-    Statement stm=null;
-    Connection con=null;
-    String date;
-    String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
-    JFrame jfrm=new JFrame("Retail Shop Employee");
-    JMenuBar jmb=new JMenuBar();
-    String empIdreceived;
-    JLabel jbl=new JLabel();
-    JLabel jbl1=new JLabel("Last Access Time:");
-    public RetailShopClass(String empIdreceived)
+   private  ResultSet rs=null;
+   private Statement stm=null;
+    private Connection con=null;
+   private  String date;
+   // String driver="net.ucanaccess.jdbc.UcanaccessDriver";
+    //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+    private JFrame jfrm=new JFrame("Retail Shop Employee");
+    private JMenuBar jmb=new JMenuBar();
+    private String empIdreceived;
+    private JLabel jbl=new JLabel();
+    private JLabel jbl1=new JLabel("Last Access Time:");
+    public RetailShopClass(String empIdreceived,Connection con)
     {   this.empIdreceived=empIdreceived;
-        connect();
+        this.con=con;
+        //connect();
         setFrameBoundaries();
         creatingItemMenu();
         creatingBillMenu();
@@ -32,9 +34,9 @@ public class RetailShopClass {
         jfrm.setVisible(true);
         jfrm.setJMenuBar(jmb);
     }
-    public void connect()
+    /*public void connect()
     {
-        try
+       try
     {
             Class.forName(driver);
             con=DriverManager.getConnection(source);
@@ -51,7 +53,7 @@ public class RetailShopClass {
             System.out.println(e);
             System.exit(1);
         }
-    }
+    }*/
     public void setFrameBoundaries()
     {
         jfrm.setSize(500,300);
@@ -69,7 +71,7 @@ public class RetailShopClass {
         addItem.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new AddItemClass(); 
+               new AddItemClass(con); 
                
         }});
         JMenuItem removeItem=new JMenuItem("Remove Item");
@@ -77,7 +79,7 @@ public class RetailShopClass {
         removeItem.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new DeleteItemClass(); 
+               new DeleteItemClass(con); 
                
         }});
         JMenuItem viewItem=new JMenuItem("View Item");
@@ -85,13 +87,13 @@ public class RetailShopClass {
         addItem.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new AddItemClass(); 
+               new AddItemClass(con); 
                
         }});
         viewItem.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new ViewItemClass(); 
+               new ViewItemClass(con); 
                
         }});
         
@@ -107,7 +109,7 @@ public class RetailShopClass {
         viewBill.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new ViewBillClass(); 
+               new ViewBillClass(con); 
                
         }});
     }

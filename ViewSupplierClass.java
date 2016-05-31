@@ -9,17 +9,19 @@ import java.util.*;
 
 public class ViewSupplierClass {
     
-    String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
-    Connection con=null;
-    JFrame jfrm2=new JFrame("View Item");
+    //String driver="net.ucanaccess.jdbc.UcanaccessDriver";
+    //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+    private Connection con=null;
+    private JFrame jfrm2=new JFrame("View Item");
     
-    JPanel jpan=new JPanel();
+   private  JPanel jpan=new JPanel();
     
-    public ViewSupplierClass(){
+    public ViewSupplierClass(Connection con){
+        
+        this.con=con;
         jfrm2.setSize(500,300);
         jfrm2.setVisible(true);
-        try
+        /*try
     {
             Class.forName(driver);
             con=DriverManager.getConnection(source);
@@ -35,7 +37,7 @@ public class ViewSupplierClass {
         {   System.err.println("Unable To Connect");
             System.out.println(e);
             System.exit(1);
-        }
+        }*/
         viewSupplierDetail();
     }
     public void viewSupplierDetail(){

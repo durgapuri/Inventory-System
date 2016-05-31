@@ -10,29 +10,30 @@ import java.text.SimpleDateFormat;
 
 public class UpdateSupplierClass {
     
-    String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    String source="jdbc:ucanaccess://C:\\Users\\me\\Desktop\\New folder\\databaseinv.accdb";
-    Connection con=null;
-    JFrame jfrm1=new JFrame("Update Supplier");
-    JPanel jpan=new JPanel();
+    //String driver="net.ucanaccess.jdbc.UcanaccessDriver";
+    //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+    private Connection con=null;
+    private JFrame jfrm1=new JFrame("Update Supplier");
+    private JPanel jpan=new JPanel();
    
-    JLabel supId=new JLabel("Supplier Id");
-    JLabel supNameLabel=new JLabel("Supplier Name");
-    JLabel supAddrLabel=new JLabel("Address");
-    JLabel supContactLabel=new JLabel("Contact No");
-    JTextField textsupName = new JTextField(10);
-    JTextField textsupAddr = new JTextField(10);
-    JTextField textsupContact = new JTextField(10);
-    JComboBox jcom=new JComboBox();
+    private JLabel supId=new JLabel("Supplier Id");
+    private JLabel supNameLabel=new JLabel("Supplier Name");
+    private JLabel supAddrLabel=new JLabel("Address");
+    private JLabel supContactLabel=new JLabel("Contact No");
+    private JTextField textsupName = new JTextField(10);
+    private JTextField textsupAddr = new JTextField(10);
+    private JTextField textsupContact = new JTextField(10);
+    private JComboBox jcom=new JComboBox();
+    private String x;
     
-    
-    JButton jbn=new JButton("UPDATE");
+    private  JButton jbn=new JButton("UPDATE");
         
-    public UpdateSupplierClass()
+    public UpdateSupplierClass(Connection con)
     {
+        this.con=con;
        setLayoutBoundaries(); 
        addComponents();
-       try
+      /*try
     {
             Class.forName(driver);
             con=DriverManager.getConnection(source);
@@ -49,7 +50,7 @@ public class UpdateSupplierClass {
             System.out.println(e);
             System.exit(1);
         }
-     
+     */
        combox();
        updatingCustomerFunction();
        
@@ -75,11 +76,20 @@ public class UpdateSupplierClass {
             
         }
             
-           String x=jcom.getSelectedItem().toString();
+            jcom.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae){
+                System.out.println("entered");
+                x=String.valueOf(jcom.getSelectedItem());
+                 fillDetail(x);
+             
+                        
+                
+            } 
+        });
             
-            System.out.println(x);  
+           
             
-            fillDetail(x);
+           
             rs.close();
         }
         catch(Exception e)
@@ -214,10 +224,10 @@ public class UpdateSupplierClass {
         jfrm1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
     }
-    public static void main(String args[])
+    /*public static void main(String args[])
     {
         new UpdateSupplierClass();
-    }
+    }*/
     
 } 
 

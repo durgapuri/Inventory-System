@@ -1,5 +1,6 @@
 
 package ManagerPackage;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -14,20 +15,21 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class ManagerClass {
-    String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
-    String date;
-    Connection con=null;
-    ResultSet rs=null;
-    Statement stm=null;
-    JFrame jfrm=new JFrame("Manager");
-    JMenuBar jmb=new JMenuBar();
-    String empIdreceived;
-    JLabel jbl=new JLabel();
-    JLabel jbl1=new JLabel("Last Access Time:");
-    public ManagerClass(String empIdreceived)
+    //String driver="net.ucanaccess.jdbc.UcanaccessDriver";
+    //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+    private String date;
+    private Connection con=null;
+    private ResultSet rs=null;
+    private Statement stm=null;
+    private JFrame jfrm=new JFrame("Manager");
+    private JMenuBar jmb=new JMenuBar();
+    private String empIdreceived;
+    private JLabel jbl=new JLabel();
+    private JLabel jbl1=new JLabel("Last Access Time:");
+    public ManagerClass(String empIdreceived,Connection con)
     {   this.empIdreceived=empIdreceived;
-        try
+        this.con=con;
+       /* try
     {
             Class.forName(driver);
             con=DriverManager.getConnection(source);
@@ -43,7 +45,7 @@ public class ManagerClass {
         {   System.err.println("Unable To Connect");
             System.out.println(e);
             System.exit(1);
-        }
+        }*/
         settingFrameBoundaries();
         displayDateTime();
         creatingEmployeeMenu();
@@ -72,7 +74,7 @@ public class ManagerClass {
         viewEmployee.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new ViewEmployeeClass(); 
+               new ViewEmployeeClass(con); 
                
         }});
     }
@@ -85,7 +87,7 @@ public class ManagerClass {
         addCust.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new AddCustomerClass(); 
+               new AddCustomerClass(con); 
                
         }});
         JMenuItem removeCust=new JMenuItem("Remove Customer");
@@ -93,7 +95,7 @@ public class ManagerClass {
         removeCust.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new DeleteCustomerClass(); 
+               new DeleteCustomerClass(con); 
                
         }});
         JMenuItem updateCust=new JMenuItem("Update Customer");
@@ -101,7 +103,7 @@ public class ManagerClass {
         updateCust.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new UpdateCustomerClass(); 
+               new UpdateCustomerClass(con); 
                
         }});
         JMenuItem viewCust=new JMenuItem("View Customer");
@@ -109,7 +111,7 @@ public class ManagerClass {
         viewCust.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new ViewCustomerClass(); 
+               new ViewCustomerClass(con); 
                
         }});
     }
@@ -122,7 +124,7 @@ public class ManagerClass {
         addSup.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new AddSupplier(); 
+               new AddSupplier(con); 
                
         }});
         JMenuItem removeSup=new JMenuItem("Remove Supplier");
@@ -130,7 +132,7 @@ public class ManagerClass {
         removeSup.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new DeleteSupplierClass(); 
+               new DeleteSupplierClass(con); 
                
         }});
         JMenuItem updateSup=new JMenuItem("Update Supplier");
@@ -138,7 +140,7 @@ public class ManagerClass {
         updateSup.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new UpdateSupplierClass(); 
+               new UpdateSupplierClass(con); 
                
         }});
         JMenuItem viewSup=new JMenuItem("View Suppliers");
@@ -146,7 +148,7 @@ public class ManagerClass {
         viewSup.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new ViewSupplierClass(); 
+               new ViewSupplierClass(con); 
                
         }});
     }
@@ -159,7 +161,7 @@ public class ManagerClass {
         addItem.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new AddItemClass(); 
+               new AddItemClass(con); 
                
         }});
         JMenuItem removeItem=new JMenuItem("Remove Item");
@@ -167,7 +169,7 @@ public class ManagerClass {
         removeItem.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new DeleteItemClass(); 
+               new DeleteItemClass(con); 
                
         }});
         JMenuItem updateItem=new JMenuItem("Update Item");
@@ -175,7 +177,7 @@ public class ManagerClass {
         updateItem.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new UpdateItemClass(); 
+               new UpdateItemClass(con); 
                
         }});
         JMenuItem viewItem=new JMenuItem("View Item");
@@ -183,7 +185,7 @@ public class ManagerClass {
         viewItem.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new ViewItemClass(); 
+               new ViewItemClass(con); 
                
         }});
     }
@@ -196,7 +198,7 @@ public class ManagerClass {
         viewStock.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new ViewStockClass(); 
+               new ViewStockClass(con); 
                
         }});
     }
@@ -211,7 +213,7 @@ public class ManagerClass {
         viewBill.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new ViewBillClass(); 
+               new ViewBillClass(con); 
                
         }});
     }

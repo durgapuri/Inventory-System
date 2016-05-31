@@ -1,5 +1,6 @@
 
 package StockPackage;
+
 import java.sql.*;
 import javax.swing.*;
 import java.awt.*;
@@ -8,17 +9,18 @@ import javax.swing.table.*;
 import java.util.*;
 
 public class ViewStockClass {
-    String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
-    Connection con=null;
-    JFrame jfrm3=new JFrame("View Stock Details");
+    //String driver="net.ucanaccess.jdbc.UcanaccessDriver";
+    //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+   private  Connection con=null;
+    private JFrame jfrm3=new JFrame("View Stock Details");
     
-    JPanel jpan=new JPanel();
+    private JPanel jpan=new JPanel();
     
-    public ViewStockClass(){
+    public ViewStockClass(Connection con){
+        this.con=con;
         jfrm3.setSize(500,300);
         jfrm3.setVisible(true);
-        try
+        /*try
     {
             Class.forName(driver);
             con=DriverManager.getConnection(source);
@@ -34,7 +36,7 @@ public class ViewStockClass {
         {   System.err.println("Unable To Connect");
             System.out.println(e);
             System.exit(1);
-        }
+        }*/
         viewStockDetail();
     }
     public void viewStockDetail(){

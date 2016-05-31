@@ -1,5 +1,6 @@
 
 package ItemPackage;
+
 import java.sql.*;
 import javax.swing.*;
 import java.awt.*;
@@ -7,31 +8,34 @@ import java.awt.event.*;
 
 public class UpdateItemClass {
     
-    String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    String source="jdbc:ucanaccess://C:\\Users\\me\\Desktop\\New folder\\databaseinv.accdb";
-    Connection con=null;
-    JFrame jfrm1=new JFrame("Update Item");
-    JPanel jpan=new JPanel();
-    JLabel itemIdLabel=new JLabel("Item Id");
-    JLabel itemNameLabel=new JLabel("Item Name");
-    JLabel itemTypeLabel=new JLabel("Item Type");
-    JLabel itemCompanyNameLabel=new JLabel("Item Company Name");
-    JLabel itemStockLabel=new JLabel("Item Stock");
-    JLabel itemPriceLabel=new JLabel("Item Price");
-    JComboBox jcom=new JComboBox();
+   // String driver="net.ucanaccess.jdbc.UcanaccessDriver";
+   // String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
     
-    JTextField textItemName = new JTextField(10);
-    JTextField textItemType = new JTextField(10);
-    JTextField textItemCompanyName = new JTextField(10);
-    JTextField textItemStock = new JTextField(10);
-    JTextField textItemPrice = new JTextField(10);
-    JButton jbn=new JButton("UPDATE");
+    private Connection con=null;
+    private JFrame jfrm1=new JFrame("Update Item");
+    private JPanel jpan=new JPanel();
+    private JLabel itemIdLabel=new JLabel("Item Id");
+    private JLabel itemNameLabel=new JLabel("Item Name");
+    private JLabel itemTypeLabel=new JLabel("Item Type");
+    private JLabel itemCompanyNameLabel=new JLabel("Item Company Name");
+    private JLabel itemStockLabel=new JLabel("Item Stock");
+    private JLabel itemPriceLabel=new JLabel("Item Price");
+    private JComboBox jcom=new JComboBox();
+    
+    private String x;
+    private JTextField textItemName = new JTextField(10);
+    private JTextField textItemType = new JTextField(10);
+    private JTextField textItemCompanyName = new JTextField(10);
+    private JTextField textItemStock = new JTextField(10);
+    private JTextField textItemPrice = new JTextField(10);
+    private JButton jbn=new JButton("UPDATE");
         
-    public UpdateItemClass()
+    public UpdateItemClass(Connection con)
     {
+        this.con=con;
        setLayoutBoundaries(); 
          addComponents();
-       try
+      /* try
     {
             Class.forName(driver);
             con=DriverManager.getConnection(source);
@@ -47,7 +51,7 @@ public class UpdateItemClass {
         {   System.err.println("Unable To Connect");
             System.out.println(e);
             System.exit(1);
-        }
+        }*/
      
        combox();
        updatingItemFunction();
@@ -74,11 +78,20 @@ public class UpdateItemClass {
             
         }
             
-           String x=jcom.getSelectedItem().toString();
+           jcom.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae){
+                
+                x=String.valueOf(jcom.getSelectedItem());
+                 fillDetail(x);
+             
+                        
+                
+            } 
+        });
             
-            System.out.println(x);  
+           
             
-            fillDetail(x);
+           
             rs.close();
         }
         catch(Exception e)
@@ -236,10 +249,10 @@ public class UpdateItemClass {
         jfrm1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
     }
-    public static void main(String args[])
+   /* public static void main(String args[])
     {
         new UpdateItemClass();
-    }
+    }*/
     
 } 
 

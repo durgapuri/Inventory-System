@@ -8,17 +8,18 @@ import javax.swing.table.*;
 import java.util.*;
 
 public class ViewEmployeeClass {
-    String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
-    Connection con=null;
-    JFrame jfrm3=new JFrame("View Employee Details");
+    //String driver="net.ucanaccess.jdbc.UcanaccessDriver";
+    //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+   private  Connection con=null;
+    private JFrame jfrm3=new JFrame("View Employee Details");
     
-    JPanel jpan=new JPanel();
+    private JPanel jpan=new JPanel();
     
-    public ViewEmployeeClass(){
+    public ViewEmployeeClass(Connection con){
+        this.con=con;
         jfrm3.setSize(500,300);
         jfrm3.setVisible(true);
-        try
+       /* try
     {
             Class.forName(driver);
             con=DriverManager.getConnection(source);
@@ -34,7 +35,7 @@ public class ViewEmployeeClass {
         {   System.err.println("Unable To Connect");
             System.out.println(e);
             System.exit(1);
-        }
+        }*/
         viewCustomerDetail();
     }
     public void viewCustomerDetail(){

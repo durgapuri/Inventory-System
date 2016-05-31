@@ -9,18 +9,19 @@ import javax.swing.table.*;
 import java.util.*;
 
 public class ViewItemClass {
-    String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
-    Connection con=null;
-    JFrame jfrm2=new JFrame("View Item");
+    //String driver="net.ucanaccess.jdbc.UcanaccessDriver";
+    //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+    private Connection con=null;
+    private JFrame jfrm2=new JFrame("View Item");
     
-    JPanel jpan=new JPanel();
+    private JPanel jpan=new JPanel();
     
     
-    public ViewItemClass(){
+    public ViewItemClass(Connection con){
+        this.con=con;
         jfrm2.setSize(500,300);
         jfrm2.setVisible(true);
-    try{
+  /*  try{
         Class.forName(driver);
         con=DriverManager.getConnection(source);
         System.out.println("Connected Successfully");
@@ -35,7 +36,7 @@ public class ViewItemClass {
         System.err.println("Unnable to connect");
         System.out.println(e);
         System.exit(1);
-    }
+    }*/
     addViewFunction();
 }
     public void addViewFunction(){

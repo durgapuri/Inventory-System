@@ -1,5 +1,6 @@
 
 package CustomerPackage;
+
 import java.sql.*;
 import javax.swing.*;
 import java.awt.*;
@@ -10,33 +11,35 @@ import java.text.SimpleDateFormat;
 
 public class UpdateCustomerClass {
     
-    String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    String source="jdbc:ucanaccess://C:\\Users\\me\\Desktop\\New folder\\databaseinv.accdb";
-    Connection con=null;
-    JFrame jfrm1=new JFrame("Update Item");
-    JPanel jpan=new JPanel();
-    JLabel cusPhnLabel=new JLabel("Customer Phone No");
-    JLabel cusNameLabel=new JLabel("Customer Name");
-    JLabel cusAddrLabel=new JLabel("Customer Address");
-    JLabel cusEmailIdLabel=new JLabel("Customer Email Id");
+   //String driver="net.ucanaccess.jdbc.UcanaccessDriver";
+   //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+    private Connection con=null;
+    private JFrame jfrm1=new JFrame("Update Customer");
+    private JPanel jpan=new JPanel();
+    private JLabel cusPhnLabel=new JLabel("Customer Phone No");
+    private JLabel cusNameLabel=new JLabel("Customer Name");
+    private JLabel cusAddrLabel=new JLabel("Customer Address");
+    private JLabel cusEmailIdLabel=new JLabel("Customer Email Id");
+    private String x;
     
-    JComboBox jcom=new JComboBox();
-    DateFormat format = new SimpleDateFormat("MM/DD/YYYY"); //display your format.
+    private JComboBox jcom=new JComboBox();
+    private DateFormat format = new SimpleDateFormat("MM/DD/YYYY"); //display your format.
     
     
-    JTextField textPhn = new JTextField(10);
-    JTextField textName = new JTextField(10);
-    JTextField textAddr = new JTextField(10);
-    JTextField textEmail = new JTextField(10);
+    private JTextField textPhn = new JTextField(10);
+    private JTextField textName = new JTextField(10);
+    private JTextField textAddr = new JTextField(10);
+    private JTextField textEmail = new JTextField(10);
    
     
-    JButton jbn=new JButton("UPDATE");
+    private JButton jbn=new JButton("UPDATE");
         
-    public UpdateCustomerClass()
+    public UpdateCustomerClass(Connection con)
     {
+        this.con=con;
        setLayoutBoundaries(); 
        addComponents();
-       try
+       /*try
     {
             Class.forName(driver);
             con=DriverManager.getConnection(source);
@@ -52,7 +55,7 @@ public class UpdateCustomerClass {
         {   System.err.println("Unable To Connect");
             System.out.println(e);
             System.exit(1);
-        }
+        }*/
      
        combox();
        updatingCustomerFunction();
@@ -79,11 +82,20 @@ public class UpdateCustomerClass {
             
         }
             
-           String x=jcom.getSelectedItem().toString();
+             jcom.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae){
+                System.out.println("entered");
+                x=String.valueOf(jcom.getSelectedItem());
+                 fillDetail(x);
+             
+                        
+                
+            } 
+        });
             
-            System.out.println(x);  
+           
             
-            fillDetail(x);
+           
             rs.close();
         }
         catch(Exception e)

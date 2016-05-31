@@ -1,7 +1,6 @@
 package LoginPackage;
 
 
-import LoginPackage.EncDecrptClass;
 import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
@@ -14,33 +13,28 @@ import AdminPackage.*;
 
 public class login {
     
-    JFrame jfrm;
-    JPanel jpane;
-    JLabel empidLab;
+    private JFrame jfrm;
+    private JPanel jpane;
+    private JLabel empidLab,role,passLab;
     private JTextField  empidText;
-    JLabel passLab;
     private JPasswordField passText;
-    JLabel role;
-    String empIdpass;
-    JComboBox jcom;
-    JButton loginbutton;
-    JButton newUser;
-    String x;
-    
-  //  String DBDriver="net.ucanaccess.jdbc.UcanaccessDriver";
-    //String DBSource="jdbc:ucanaccess://C:\\Users\\me\\Desktop\\New folder\\databaseinv.accdb";
-    Connection cn;
+    private JComboBox jcom;
+    private JButton loginbutton,newUser;
+    private String DBDriver="net.ucanaccess.jdbc.UcanaccessDriver",
+            DBSource="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb",x,empIdpass;
+    private Connection con;
     
     public login(){
     
     jfrm=new JFrame("Login ");
     jfrm.setSize(500,400);
-    jfrm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    //jfrm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    jfrm.setLocationRelativeTo(null);
     jfrm.setVisible(true);
     placeComponents();
-    /*try{
+    try{
         Class.forName(DBDriver);
-        cn=DriverManager.getConnection(DBSource);
+        con=DriverManager.getConnection(DBSource);
         System.out.println("Connected Successfully");
         placeComponents();
         
@@ -54,7 +48,7 @@ public class login {
         System.err.println("Unable to connect");
         System.out.println(e);
         System.exit(1);
-    }*/
+    }
     
 }
     public void placeComponents(){
@@ -127,7 +121,7 @@ public class login {
         
         newUser.addActionListener(new ActionListener(){
           public void actionPerformed(ActionEvent ae){
-             userClass user=new userClass();
+             userClass user=new userClass(con);
              jfrm.dispose();
                        }  
         });
@@ -150,17 +144,18 @@ public class login {
                   String x = jcom.getSelectedItem().toString();
                   System.out.println(x);
                   if(x=="Manager"){
-                  ManagerClass mgcls=new ManagerClass(empIdpass);
+                  ManagerClass mgcls=new ManagerClass(empIdpass,con);
               }
                   if(x=="Admin"){
-                      AdminClass admcls=new AdminClass(empIdpass);
+                      AdminClass admcls=new AdminClass(empIdpass,con);
                   }
                   if(x=="RetailShopEmployee"){
-                      RetailShopClass rsemp=new RetailShopClass(empIdpass);
+                      RetailShopClass rsemp=new RetailShopClass(empIdpass,con);
                   }
               }
               else{
-                  JOptionPane.showMessageDialog(null,"Invalid user");
+                  JOptionPane.showMessageDialog(null,"Incorrect Employee ID or password or role\n\n"+
+												"Please enter correct login info.","Invalid User",JOptionPane.ERROR_MESSAGE);
                   jfrm.dispose();
                   new login();
                   
@@ -171,19 +166,17 @@ public class login {
     
         public int loginStatus(){
             
+	     Statement st=null;
+             ResultSet rs=null;
+             String sql=null;
            try{
-                Statement st=null;
-                ResultSet rs=null;
-                String sql=null;
                 int count=0;
                    
-                st=cn.createStatement();
-                String emp=empidText.getText().trim();
-                String pass = new String(passText.getPassword());
-                String x = jcom.getSelectedItem().toString();
-                System.out.println(x);
-                
-                String encpass=EncDecrptClass.encrypt(pass);
+                st=con.createStatement();
+                String emp=empidText.getText().trim(),
+		pass = new String(passText.getPassword()),
+		x = jcom.getSelectedItem().toString(),               
+		encpass=EncDecrptClass.encrypt(pass);
                 sql="select empId,password from masterEmployee where empId= '"+emp+"' and password= '"+encpass+"' and role= '"+x+"'";
                 rs=st.executeQuery(sql);
                 while(rs.next()){
@@ -200,11 +193,18 @@ public class login {
         
     
 
-   /* public static void main(String []args){
+   public static void main(String []args){
+	try 
+    { 
+        UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel"); 
+    } 
+    catch(Exception e){
+		System.out.println(e);
+    }
         SwingUtilities.invokeLater(new Runnable(){
             public void run(){
                 new login();
             }
         });
-    }*/
+    }
 }

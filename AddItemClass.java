@@ -7,27 +7,30 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class AddItemClass {
-    String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
-    Connection con=null;
-    JFrame jfrm1=new JFrame("Add New Item");
-    JPanel jpan=new JPanel();
-    JLabel itemNameLabel=new JLabel("Item Name");
-    JLabel itemTypeLabel=new JLabel("Item Type");
-    JLabel itemCompanyNameLabel=new JLabel("Item Company Name");
-    JLabel itemStockLabel=new JLabel("Item Stock");
-    JLabel itemPriceLabel=new JLabel("Item Price");
-    JTextField textItemName = new JTextField(10);
-    JTextField textItemType = new JTextField(10);
-    JTextField textItemCompanyName = new JTextField(10);
-    JTextField textItemStock = new JTextField(10);
-    JTextField textItemPrice = new JTextField(10);
-    JButton jbn=new JButton("ADD");
+    //String driver="net.ucanaccess.jdbc.UcanaccessDriver";
+    //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+    private Connection con=null;
+    private JFrame jfrm1=new JFrame("Add New Item");
+    private JPanel jpan=new JPanel();
+    private JLabel itemNameLabel=new JLabel("Item Name");
+    private JLabel itemTypeLabel=new JLabel("Item Type");
+   private  JLabel itemCompanyNameLabel=new JLabel("Item Company Name");
+    private JLabel itemStockLabel=new JLabel("Item Stock");
+    private JLabel itemPriceLabel=new JLabel("Item Price");
+    private JLabel suppId=new JLabel("Supplier ID");
+    private JTextField textItemName = new JTextField(10);
+   private  JTextField textItemType = new JTextField(10);
+    private JTextField textItemCompanyName = new JTextField(10);
+    private JTextField textItemStock = new JTextField(10);
+   private  JTextField textItemPrice = new JTextField(10);
+    private JTextField textSupId=new JTextField(10);
+    private JButton jbn=new JButton("ADD");
         
-    public AddItemClass()
+    public AddItemClass(Connection con)
     {
+        this.con=con;
        setLayoutBoundaries(); 
-       try
+     /*  try
     {
             Class.forName(driver);
             con=DriverManager.getConnection(source);
@@ -43,7 +46,7 @@ public class AddItemClass {
         {   System.err.println("Unable To Connect");
             System.out.println(e);
             System.exit(1);
-        }
+        }*/
        addingItemFunction();
        addComponents();
         
@@ -59,12 +62,12 @@ public class AddItemClass {
                 if(ItemAdded()==1)
                 {
                    JOptionPane.showMessageDialog(null,"Item Added");
-                   
+                   jfrm1.dispose();
                 }
                 else
                {   JOptionPane.showMessageDialog(null,"Item not Added");
                }
-                jfrm1.dispose();
+                //jfrm1.dispose();
             }
         });
     }
@@ -78,11 +81,13 @@ public class AddItemClass {
         itemCompanyNameLabel.setBounds(50,160,150,25);
         itemStockLabel.setBounds(50, 190, 100, 25);
         itemPriceLabel.setBounds(50, 220, 100, 25);
+        suppId.setBounds(50, 250, 100, 25);
         textItemName.setBounds(200,100,150,25);
         textItemType.setBounds(200,130,150,25);
         textItemCompanyName.setBounds(200,160,150,25);
         textItemStock.setBounds(200, 190, 150, 25);
         textItemPrice.setBounds(200,220,150,25);
+        textSupId.setBounds(200,250,150,25);
         jbn.setBounds(300,300,100,30);
     }
     public int ItemAdded()
@@ -98,6 +103,7 @@ public class AddItemClass {
             String itemCompanyName=textItemCompanyName.getText().trim();
             String itemStock=textItemStock.getText().trim();
             String itemPrice=textItemPrice.getText().trim();
+            int supplierId=Integer.parseInt(textSupId.getText().trim());
             System.out.println("values taken");
             sql="INSERT INTO `item`(itemName,itemType,itemCompanyName) VALUES ('"+itemName+"','"+itemType+"','"+itemCompanyName+"')";
             
@@ -112,7 +118,7 @@ public class AddItemClass {
               System.out.println(in);
             
             
-            sql = "INSERT INTO `stock`(itemId,itemStock,itemPrice) VALUES ("+in+","+itemStock+","+itemPrice+")";
+            sql = "INSERT INTO `stock`(itemId,itemStock,itemPrice,SupId) VALUES ("+in+","+itemStock+","+itemPrice+","+supplierId+")";
             System.out.println(sql);
             
             stm.executeUpdate(sql);
@@ -142,6 +148,8 @@ public class AddItemClass {
         jpan.add(textItemType);
         jpan.add(textItemPrice);
         jpan.add(jbn);
+        jpan.add(suppId);
+        jpan.add(textSupId);
         jfrm1.add(jpan);
         jfrm1.setVisible(true);
         

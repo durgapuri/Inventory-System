@@ -1,5 +1,6 @@
 
 package AdminPackage;
+
 import ItemPackage.AddItemClass;
 import ItemPackage.ViewItemClass;
 import java.awt.event.ActionEvent;
@@ -11,25 +12,31 @@ import EmployeePackage.*;
 import CustomerPackage.*;
 import SupplierPackage.*;
 import ItemPackage.*;
+import BillPackage.*;
 import java.sql.*;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
 
 public class AdminClass {
-    String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
-    String date;
+    //String driver="net.ucanaccess.jdbc.UcanaccessDriver";
+    //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+    
     Connection con=null;
     ResultSet rs=null;
     Statement stm=null;
+    
     JFrame jfrm=new JFrame("Admin");
     JMenuBar jmb=new JMenuBar();
     String empIdreceived;
+    String date;
     JLabel jbl=new JLabel();
     JLabel jbl1=new JLabel("Last Access Time:");
-    public AdminClass(String empIdreceived)
-    {   this.empIdreceived=empIdreceived;
-        try
+    
+    public AdminClass(String empIdreceived,Connection con)
+    {   
+        this.empIdreceived=empIdreceived;
+        this.con=con;
+       /* try
     {
             Class.forName(driver);
             con=DriverManager.getConnection(source);
@@ -45,7 +52,7 @@ public class AdminClass {
         {   System.err.println("Unable To Connect");
             System.out.println(e);
             System.exit(1);
-        }
+        }*/
         settingFrameBoundaries();
         displayDateTime();
         creatingEmployeeMenu();
@@ -73,7 +80,7 @@ public class AdminClass {
          addEmployee.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new AddEmployeeClass(); 
+               new AddEmployeeClass(con); 
                
         }});
         JMenuItem removeEmployee=new JMenuItem("Remove Employee");
@@ -81,7 +88,7 @@ public class AdminClass {
          removeEmployee.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new DeleteEmployeeClass(); 
+               new DeleteEmployeeClass(con); 
                
         }});
         JMenuItem updateEmployee=new JMenuItem("Update Employee");
@@ -89,7 +96,7 @@ public class AdminClass {
         updateEmployee.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new UpdateEmployeeClass(); 
+               new UpdateEmployeeClass(con); 
                
         }});
         JMenuItem viewEmployee=new JMenuItem("View Employee Details");
@@ -97,7 +104,7 @@ public class AdminClass {
         viewEmployee.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new ViewEmployeeClass(); 
+               new ViewEmployeeClass(con); 
                
         }});
     }
@@ -110,7 +117,7 @@ public class AdminClass {
         addCust.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new AddCustomerClass(); 
+               new AddCustomerClass(con); 
                
         }});
         JMenuItem removeCust=new JMenuItem("Remove Customer");
@@ -118,7 +125,7 @@ public class AdminClass {
          removeCust.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new DeleteCustomerClass(); 
+               new DeleteCustomerClass(con); 
                
         }});
         JMenuItem updateCust=new JMenuItem("Update Customer");
@@ -126,7 +133,7 @@ public class AdminClass {
         updateCust.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new UpdateCustomerClass(); 
+               new UpdateCustomerClass(con); 
                
         }});
         JMenuItem viewCust=new JMenuItem("View Customer");
@@ -134,7 +141,7 @@ public class AdminClass {
         viewCust.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new ViewCustomerClass(); 
+               new ViewCustomerClass(con); 
                
         }});
     }
@@ -147,7 +154,7 @@ public class AdminClass {
         addSup.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new AddSupplier(); 
+               new AddSupplier(con); 
                
         }});
         JMenuItem removeSup=new JMenuItem("Remove Supplier");
@@ -155,7 +162,7 @@ public class AdminClass {
          removeSup.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new DeleteSupplierClass(); 
+               new DeleteSupplierClass(con); 
                
         }});
         JMenuItem updateSup=new JMenuItem("Update Supplier");
@@ -163,7 +170,7 @@ public class AdminClass {
         updateSup.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new UpdateSupplierClass(); 
+               new UpdateSupplierClass(con); 
                
         }});
         JMenuItem viewSup=new JMenuItem("View Suppliers");
@@ -171,7 +178,7 @@ public class AdminClass {
         viewSup.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new ViewSupplierClass(); 
+               new ViewSupplierClass(con); 
                
         }});
     }
@@ -184,7 +191,7 @@ public class AdminClass {
         addItem.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new AddItemClass(); 
+               new AddItemClass(con); 
                
         }});
         JMenuItem removeItem=new JMenuItem("Remove Item");
@@ -192,7 +199,7 @@ public class AdminClass {
         removeItem.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new DeleteItemClass();
+               new DeleteItemClass(con);
                
         }});
         JMenuItem updateItem=new JMenuItem("Update Item");
@@ -200,7 +207,7 @@ public class AdminClass {
         updateItem.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new UpdateItemClass(); 
+               new UpdateItemClass(con); 
                
         }});
         JMenuItem viewItem=new JMenuItem("View Item");
@@ -208,7 +215,7 @@ public class AdminClass {
         viewItem.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new ViewItemClass(); 
+               new ViewItemClass(con); 
                
         }});
     }
@@ -221,7 +228,7 @@ public class AdminClass {
         viewStock.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new ViewStockClass(); 
+               new ViewStockClass(con); 
                
         }});
     }
@@ -231,12 +238,18 @@ public class AdminClass {
         jmb.add(menuBill);
         JMenuItem createBill=new JMenuItem("Create Bill");
         menuBill.add(createBill);
+        createBill.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+               new CreateBillClass(); 
+               
+        }});
         JMenuItem viewBill=new JMenuItem("View Bill");
         menuBill.add(viewBill);
         viewBill.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new ViewBillClass(); 
+               new ViewBillClass(con); 
                
         }});
     }
