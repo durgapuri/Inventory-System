@@ -10,36 +10,24 @@ import javax.swing.table.*;
 import java.util.*;
 
 public class ViewCustomerClass {
-   // String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-   // String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
-    private Connection con=null;
+
+     private Connection con=null;
      private JFrame jfrm3=new JFrame("View Customer Details");
     
-    private JPanel jpan=new JPanel();
+     private JPanel jpan=new JPanel();
     
-    public ViewCustomerClass(Connection con){
+	
+	 public ViewCustomerClass(){}
+     public ViewCustomerClass(Connection con){
         this.con=con;
         jfrm3.setSize(500,300);
         jfrm3.setVisible(true);
-      /*  try
-    {
-            Class.forName(driver);
-            con=DriverManager.getConnection(source);
-            System.out.println("connected successfully");
-            
-    }
-        catch(ClassNotFoundException e)
-        {   System.err.println("Failed To Load Driver");
-            System.out.println(e);
-            System.exit(1);
-        }
-        catch(SQLException e)
-        {   System.err.println("Unable To Connect");
-            System.out.println(e);
-            System.exit(1);
-        }*/
         viewCustomerDetail();
     }
+	
+	
+	
+	
     public void viewCustomerDetail(){
         Vector columnNames = new Vector();
         Vector data = new Vector();
@@ -85,23 +73,13 @@ public class ViewCustomerClass {
         
         
         jfrm3.add(jp);
+        jfrm3.setLocationRelativeTo(null);
         JScrollPane scrollPane = new JScrollPane(table);
         jp.add(scrollPane);
         scrollPane.setBounds(200,100,900,300);
         table.getTableHeader().setReorderingAllowed(false);
  }
     
-        
-    
-    
-   /* public static void main(String []args){
-        SwingUtilities.invokeLater(new Runnable(){
-            public void run(){
-                new ViewCustomerClass();
-            }
-        });
-    }*/
-
 }
     
     

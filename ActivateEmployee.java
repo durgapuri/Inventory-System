@@ -8,10 +8,8 @@ import javax.swing.*;
 import java.util.*;
 import javax.swing.table.*;
 import javax.swing.table.DefaultTableModel.*;
-
-public class DeleteEmployeeClass {
+public class ActivateEmployee {
    
-    
    
     private Connection con=null;
     private Statement stm=null;
@@ -20,34 +18,40 @@ public class DeleteEmployeeClass {
     private int deleted;
     private JPanel jpn=new JPanel(new BorderLayout());
     private String [] empDetails= new String[7];
-    private JFrame jfrm1=new JFrame("Delete Employee Details");
+    private JFrame jfrm1=new JFrame("Activate Employee");
     private JPanel jpan=new JPanel();
     private JLabel itemNameLabel=new JLabel("Employee Id");
-    private JButton jbn=new JButton("Delete");
+    private JButton jbna=new JButton("Activate");
+    private JButton jbnd=new JButton("Deactivate");
     private ResultSet rs=null;
     private final JComboBox jComboBox1=new JComboBox();
     private DefaultTableModel tblModel;
     private JTable table= new JTable(tblModel);
     private JScrollPane scrollPane = new JScrollPane(table);
     
-    public DeleteEmployeeClass(Connection con)
+    public ActivateEmployee(Connection con)
     {   
         this.con=con;
+        System.out.println("prachee");
         setLayoutBoundaries();
-        addComponents();
-        addingToComboBox();
-        delete();
+        
+        
+        
+         addComponents();
+         addingToComboBox();
+         update();
          
     }
     public void setLayoutBoundaries()
     {  
         jpan.setLayout(null);
-       
+        jfrm1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jfrm1.setSize(700,300);
         itemNameLabel.setBounds(100,50,150,25);
         jComboBox1.setBounds(200,50,100,25);
         jpn.setBounds(50,100,600,50);
-        jbn.setBounds(400,50,100,25);
+        jbna.setBounds(400,50,100,25);
+        jbnd.setBounds(500,50,100,25);
         scrollPane.setBounds(200,100,1200,400);
         
     }
@@ -58,7 +62,8 @@ public class DeleteEmployeeClass {
         jpan.add(jComboBox1);
         jfrm1.add(jpan);
         jpan.add(jpn);
-        jpan.add(jbn);
+        jpan.add(jbna);
+        jpan.add(jbnd);
         jpn.add(scrollPane);
         table.getTableHeader().setReorderingAllowed(false);
         jfrm1.setLocationRelativeTo(null);   
@@ -72,7 +77,7 @@ public class DeleteEmployeeClass {
                 System.out.println("entered");
                 s=String.valueOf(jComboBox1.getSelectedItem());
        
-                viewDetailsOfEmployee(s);
+                viewDetailsOfItem(s);
                         
                 table.setModel(tblModel);
                 tblModel.fireTableDataChanged();
@@ -83,7 +88,7 @@ public class DeleteEmployeeClass {
         try
         {
             stm=con.createStatement();
-            rs = stm.executeQuery("select empId from masterEmployee");
+            rs = stm.executeQuery("select empId from masterEmployee where ActiveStatus="+"'Deactivated'");
             while(rs.next()){
             
             String sc= rs.getString("empId");
@@ -113,7 +118,7 @@ public class DeleteEmployeeClass {
         tblModel.addColumn("PHONE NUMBER");
         tblModel.addColumn("EMAIL ID");
        }
-    public void viewDetailsOfEmployee(String s)
+    public void viewDetailsOfItem(String s)
     {  
         tblModel = (DefaultTableModel) table.getModel();
         setColumns();
@@ -144,28 +149,34 @@ public class DeleteEmployeeClass {
         }
         
     }
-    public void delete()
-    { jbn.addActionListener(new ActionListener(){
+    public void update()
+    { jbna.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             { 
                 try
                 {   System.out.println("reached query");
                     stm=con.createStatement();
                     System.out.println(s);
-                    String st="Delete from masterEmployee where empId='"+s+"'";
-                    stm.executeUpdate(st);
-                    JOptionPane.showMessageDialog(null,"Employee Details Deleted");
+                    
+                    PreparedStatement ps=con.prepareStatement("UPDATE masterEmployee SET ActiveStatus = ?"+"WHERE empId = ? ");
+                     ps.setString(1,"Activated");
+                     ps.setString(2,s);
+                   
+                    ps.executeUpdate();
+                    JOptionPane.showMessageDialog(null,"Employee Activated");
                     jfrm1.dispose();
                    
                 }
                 catch(Exception e)
                 {
                     System.out.println(e);
-                    JOptionPane.showMessageDialog(null,"Unable To Delete","",JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null,"Unable To Activate");
                 }
             }
         
     });
+    
     }
    
 }
+

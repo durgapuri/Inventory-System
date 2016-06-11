@@ -9,37 +9,21 @@ import java.util.*;
 
 public class ViewSupplierClass {
     
-    //String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+
     private Connection con=null;
-    private JFrame jfrm2=new JFrame("View Item");
+    private JFrame jfrm2=new JFrame("View Supplier Details");
     
-   private  JPanel jpan=new JPanel();
+    private  JPanel jpan=new JPanel();
     
     public ViewSupplierClass(Connection con){
         
         this.con=con;
         jfrm2.setSize(500,300);
         jfrm2.setVisible(true);
-        /*try
-    {
-            Class.forName(driver);
-            con=DriverManager.getConnection(source);
-            System.out.println("connected successfully");
-            
-    }
-        catch(ClassNotFoundException e)
-        {   System.err.println("Failed To Load Driver");
-            System.out.println(e);
-            System.exit(1);
-        }
-        catch(SQLException e)
-        {   System.err.println("Unable To Connect");
-            System.out.println(e);
-            System.exit(1);
-        }*/
+        jfrm2.setLocationRelativeTo(null);
         viewSupplierDetail();
     }
+	
     public void viewSupplierDetail(){
         Vector columnNames = new Vector();
         Vector data = new Vector();
@@ -90,17 +74,7 @@ public class ViewSupplierClass {
         scrollPane.setBounds(200,100,900,300);
         table.getTableHeader().setReorderingAllowed(false);
  }
-    
-        
-    
-    
-   /* public static void main(String []args){
-        SwingUtilities.invokeLater(new Runnable(){
-            public void run(){
-                new ViewSupplierClass();
-            }
-        });
-    }*/
+   
 
 }
 

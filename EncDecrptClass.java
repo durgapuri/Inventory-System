@@ -1,6 +1,5 @@
 package LoginPackage;
 
-
 public class EncDecrptClass {
     
     private static final int[] array={

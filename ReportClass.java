@@ -1,4 +1,5 @@
-package BillPackage;
+
+package PurchasePackage;
 
 import java.sql.*;
 import javax.swing.*;
@@ -7,32 +8,65 @@ import java.awt.event.*;
 import javax.swing.table.*;
 import java.util.*;
 
-public class ViewBillClass {
-
-    private Connection con=null;
-    private JFrame jfrm3=new JFrame("View Employee Details");
+public class ReportClass {
     
+    private Connection con=null;
+    private JComboBox jcomboBox=new JComboBox();
+    private JFrame jfrm2=new JFrame("Report");
+    String selected;
     private JPanel jpan=new JPanel();
     
-	public ViewBillClass(){}
     
-    public ViewBillClass(Connection con){
+    public ReportClass(Connection con){
         this.con=con;
-        jfrm3.setSize(500,300);
-        jfrm3.setVisible(true);
-        jfrm3.setLocationRelativeTo(null);
-        viewBillDetail();
+        jfrm2.setSize(500,300);
+        jfrm2.setVisible(true);
+        jfrm2.setLocationRelativeTo(null);
+        viewDuration();
+    
+}
+    public void viewDuration()
+    {   
+        jcomboBox.setBounds(275,550,100,25);
+        jpan.add(jcomboBox);
+        jfrm2.add(jpan);
+        
+        jcomboBox.addItem("View By Date");
+        jcomboBox.addItem("View By Week");
+        jcomboBox.addItem("View By Month");
+        jcomboBox.addActionListener(new ActionListener(){
+            
+            public void actionPerformed(ActionEvent ae){
+                selected=String.valueOf(jcomboBox.getSelectedItem());
+                System.out.println(selected);
+          
+        
+        if(selected=="View By Date")
+        {
+            System.out.println("zindagi");
+            new ViewByDateClass(con);
+            
+        }
+        else if(selected=="View By Week")
+        {
+            new ViewByWeekClass(con);
+           
+        } 
+        else
+        {
+            new ViewByMonthClass(con);
+            
+        }
+      }});  
     }
-	
-	
-    public void viewBillDetail(){
+   /* public void addViewFunction(){
        
         Vector columnNames = new Vector();
         Vector data = new Vector();
 
         try {
 
-            String sql = "Select * from bill";
+            String sql = "Select * from employee";
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery( sql );
             ResultSetMetaData md = rs.getMetaData();
@@ -70,15 +104,21 @@ public class ViewBillClass {
         jp.add(table);
         
         
-        jfrm3.add(jp);
+        jfrm2.add(jp);
         JScrollPane scrollPane = new JScrollPane(table);
         jp.add(scrollPane);
         scrollPane.setBounds(200,100,900,300);
         table.getTableHeader().setReorderingAllowed(false);
  }
+    */
+        
+    
+    
+   
+    }
 
 
-}
+
     
     
 

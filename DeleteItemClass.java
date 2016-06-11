@@ -10,9 +10,6 @@ import javax.swing.table.*;
 import javax.swing.table.DefaultTableModel.*;
 
    public class DeleteItemClass {
-               
-    //private String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    //private String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
     
     private Connection con=null;
     private Statement stm=null;
@@ -25,7 +22,7 @@ import javax.swing.table.DefaultTableModel.*;
     private JLabel itemNameLabel=new JLabel("Item Name");
     private JButton jbn=new JButton("Delete");
     private JPanel jpn=new JPanel(new BorderLayout()),
-    jpan=new JPanel();
+					jpan=new JPanel();
     private DefaultTableModel tblModel;
     private JTable table= new JTable();
     private JScrollPane scrollPane = new JScrollPane(table);
@@ -34,34 +31,15 @@ import javax.swing.table.DefaultTableModel.*;
     private ResultSet rs=null;
     private final JComboBox jComboBox1=new JComboBox();
    
+    
     public DeleteItemClass(Connection con)
     {  
         this.con=con;       
-        setLayoutBoundaries();
-       
-       /* try
-                                                {
-                                                                Class.forName(driver);
-                                                                con=DriverManager.getConnection(source);
-                                                                System.out.println("connected successfully");
-           
-                                                }catch(ClassNotFoundException e){
-                                                               
-                                                                System.err.println("Failed To Load Driver");
-                                                                System.out.println(e);
-                                                                System.exit(1);
-                                                               
-                                                }catch(SQLException e){  
-                                                               
-                                                                System.err.println("Unable To Connect");
-                                                                System.out.println(e);
-                                                                System.exit(1);
-                                                }*/
-        
-         addingToComboBox();
-         addComponents();
-         getItemDetails();
-         delete();
+        setLayoutBoundaries();        
+        addingToComboBox();
+        addComponents();
+        getItemDetails();
+        delete();
         
     }
                
@@ -70,7 +48,7 @@ import javax.swing.table.DefaultTableModel.*;
     public void setLayoutBoundaries(){  
                
         jpan.setLayout(null);
-        //jfrm1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
         jfrm1.setSize(700,300);
         itemNameLabel.setBounds(175,50,100,25);
         jComboBox1.setBounds(275,50,100,25);       
@@ -91,7 +69,7 @@ import javax.swing.table.DefaultTableModel.*;
         jpan.add(jbn);
         jpn.add(scrollPane);
         table.getTableHeader().setReorderingAllowed(false);
-        jfrm1.setLocationRelativeTo(null);   // Used it place Jframe on center of screen , you can use it in other modules too
+        jfrm1.setLocationRelativeTo(null);   
         jfrm1.setVisible(true);
        
     }
@@ -117,8 +95,7 @@ import javax.swing.table.DefaultTableModel.*;
             System.out.println(e);
        }
   }
-               
-               
+              
     public void getItemDetails(){
         jComboBox1.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae){
@@ -136,7 +113,11 @@ import javax.swing.table.DefaultTableModel.*;
         tblModel.addColumn("ITEM COMPANY NAME");
         tblModel.addColumn("ITEM STOCK STATUS");
        }
-               
+        
+
+
+
+		
                
                
     public void viewDetailsOfItem(String Name)
@@ -156,7 +137,7 @@ import javax.swing.table.DefaultTableModel.*;
            itemId = rs.getString("itemId").trim();
                                                                
            tblModel.setRowCount(0);
-            itemDetails[0] = rs.getString("itemName").trim();
+           itemDetails[0] = rs.getString("itemName").trim();
            itemDetails[1] = rs.getString("itemType").trim();
            itemDetails[2] = rs.getString("itemCompanyName").trim();
            itemDetails[3] = rs.getString("itemStock").trim();
@@ -172,10 +153,9 @@ import javax.swing.table.DefaultTableModel.*;
  
     }
                
-               
-               
     public void delete()
-    { jbn.addActionListener(new ActionListener(){
+    { 
+        jbn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
                 if(Integer.parseInt(itemDetails[3])==0){
@@ -203,18 +183,13 @@ import javax.swing.table.DefaultTableModel.*;
            }else{
                                                                                
                 JOptionPane.showMessageDialog(null,"You can not detete item : "+itemDetails[0]+"\n\n Wait till out of stock",itemDetails[0]+" still in stock",JOptionPane.ERROR_MESSAGE);
-           }
+                }
             }
        
-             });
+        });
     }
                
-               
-    /*public static void main(String args[])
-    {
-        new DeleteItemClass();
-    }*/
-   
+              
 }
     
 

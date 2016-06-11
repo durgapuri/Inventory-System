@@ -10,8 +10,7 @@ import javax.swing.table.*;
 
 public class DeleteCustomerClass {
     
-//String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+
     private String s;
     private int deleted;
     private JPanel jpn=new JPanel(new BorderLayout());
@@ -33,29 +32,9 @@ public class DeleteCustomerClass {
     {   
         this.con=con;
         setLayoutBoundaries();
-    
-        
-        /* try
-    {
-            Class.forName(driver);
-            con=DriverManager.getConnection(source);
-            System.out.println("connected successfully");
-            
-    }
-        catch(ClassNotFoundException e)
-        {   System.err.println("Failed To Load Driver");
-            System.out.println(e);
-            System.exit(1);
-        }
-        catch(SQLException e)
-        {   System.err.println("Unable To Connect");
-            System.out.println(e);
-            System.exit(1);
-        }*/
-        
-         addComponents();
-         addingToComboBox();
-         delete();
+        addComponents();
+        addingToComboBox();
+        delete();
          
     }
     public void setLayoutBoundaries()
@@ -138,18 +117,19 @@ public class DeleteCustomerClass {
         try {
               
             String sql ="Select * from customer where phoneNo="+s+""; 
-                                                                                               
+                                                                                         
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery( sql );
-                                               
+            ResultSet rs = stmt.executeQuery(sql);
+                                                   
         while (rs.next()) {
-                                                               
+                                                                   
                 tblModel.setRowCount(0);
+                
                 cusDetails[0] = rs.getString("phoneNo").trim();
                 cusDetails[1] = rs.getString("cusName").trim();
                 cusDetails[2] = rs.getString("address").trim();
                 cusDetails[3] = rs.getString("emailId").trim();
-           
+              
                 tblModel.insertRow(tblModel.getRowCount(),cusDetails);
             
         }
@@ -181,9 +161,5 @@ public class DeleteCustomerClass {
         
     });
     }
-   /*public static void main(String args[])
-    {
-        new DeleteCustomerClass();
-    }*/
-    
+  
 }

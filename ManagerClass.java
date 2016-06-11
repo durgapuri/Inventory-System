@@ -10,13 +10,13 @@ import SupplierPackage.*;
 import ItemPackage.*;
 import StockPackage.*;
 import BillPackage.*;
+import PurchasePackage.ReportClass;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class ManagerClass {
-    //String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+
     private String date;
     private Connection con=null;
     private ResultSet rs=null;
@@ -27,25 +27,9 @@ public class ManagerClass {
     private JLabel jbl=new JLabel();
     private JLabel jbl1=new JLabel("Last Access Time:");
     public ManagerClass(String empIdreceived,Connection con)
-    {   this.empIdreceived=empIdreceived;
+    {   
+		this.empIdreceived=empIdreceived;
         this.con=con;
-       /* try
-    {
-            Class.forName(driver);
-            con=DriverManager.getConnection(source);
-            System.out.println("connected successfully");
-            
-    }
-        catch(ClassNotFoundException e)
-        {   System.err.println("Failed To Load Driver");
-            System.out.println(e);
-            System.exit(1);
-        }
-        catch(SQLException e)
-        {   System.err.println("Unable To Connect");
-            System.out.println(e);
-            System.exit(1);
-        }*/
         settingFrameBoundaries();
         displayDateTime();
         creatingEmployeeMenu();
@@ -58,6 +42,11 @@ public class ManagerClass {
         jfrm.setJMenuBar(jmb);
         jfrm.setVisible(true);
     }
+	
+	
+	
+	
+	
     public void settingFrameBoundaries()
     {
         jfrm.setSize(550,500);
@@ -65,10 +54,16 @@ public class ManagerClass {
         jfrm.setLayout(null);
         jfrm.setLocationRelativeTo(null);
     }
+	
+	
+	
+	
+	
     public void creatingEmployeeMenu()
     {
         JMenu menuEmployee=new JMenu("Employee");
         jmb.add(menuEmployee);
+        
         JMenuItem viewEmployee=new JMenuItem("View Employee Details");
         menuEmployee.add(viewEmployee);
         viewEmployee.addActionListener(new ActionListener(){
@@ -77,7 +72,20 @@ public class ManagerClass {
                new ViewEmployeeClass(con); 
                
         }});
+        
+        JMenuItem activateEmployee=new JMenuItem("Activate Employee");
+        menuEmployee.add(activateEmployee);
+        activateEmployee.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+               new ActivateEmployee(con); 
+               
+        }});
     }
+	
+	
+	
+	
     public void creatingCustomerMenu()
     {
         JMenu menuCust=new JMenu("Customer");
@@ -90,14 +98,7 @@ public class ManagerClass {
                new AddCustomerClass(con); 
                
         }});
-        JMenuItem removeCust=new JMenuItem("Remove Customer");
-        menuCust.add(removeCust);
-        removeCust.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent ae)
-            {
-               new DeleteCustomerClass(con); 
-               
-        }});
+      
         JMenuItem updateCust=new JMenuItem("Update Customer");
         menuCust.add(updateCust);
         updateCust.addActionListener(new ActionListener(){
@@ -115,6 +116,9 @@ public class ManagerClass {
                
         }});
     }
+	
+	
+	
     public void creatingSupplierMenu()
     {
         JMenu menuSup=new JMenu("Supplier");
@@ -127,14 +131,7 @@ public class ManagerClass {
                new AddSupplier(con); 
                
         }});
-        JMenuItem removeSup=new JMenuItem("Remove Supplier");
-        menuSup.add(removeSup);
-        removeSup.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent ae)
-            {
-               new DeleteSupplierClass(con); 
-               
-        }});
+       
         JMenuItem updateSup=new JMenuItem("Update Supplier");
         menuSup.add(updateSup);
         updateSup.addActionListener(new ActionListener(){
@@ -152,6 +149,11 @@ public class ManagerClass {
                
         }});
     }
+	
+	
+	
+	
+	
     public void creatingItemMenu()
     {
         JMenu menuItem=new JMenu("Item");
@@ -164,14 +166,7 @@ public class ManagerClass {
                new AddItemClass(con); 
                
         }});
-        JMenuItem removeItem=new JMenuItem("Remove Item");
-        menuItem.add(removeItem);
-        removeItem.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent ae)
-            {
-               new DeleteItemClass(con); 
-               
-        }});
+       
         JMenuItem updateItem=new JMenuItem("Update Item");
         menuItem.add(updateItem);
         updateItem.addActionListener(new ActionListener(){
@@ -189,6 +184,11 @@ public class ManagerClass {
                
         }});
     }
+	
+	
+	
+	
+	
     public void creatingStockMenu()
     {
         JMenu menuStock=new JMenu("Stock");
@@ -202,6 +202,10 @@ public class ManagerClass {
                
         }});
     }
+	
+	
+	
+	
     public void creatingBillMenu()
     {
         JMenu menuBill=new JMenu("Bill");
@@ -217,6 +221,25 @@ public class ManagerClass {
                
         }});
     }
+ public void creatingReportMenu(){
+        
+        JMenu menuReport=new JMenu("Report");
+        jmb.add(menuReport);
+        JMenuItem createReport=new JMenuItem("Generate Report");
+        menuReport.add(createReport);
+        createReport.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+           
+               new ReportClass(con); 
+               
+        }});
+        
+    }	
+	
+	
+	
+	
     public void displayDateTime()
     {   try
         {   System.out.println("entered");
@@ -249,7 +272,9 @@ public class ManagerClass {
         }
         
     }
-    public void creatingSalesMenu()
+	
+	
+ public void creatingSalesMenu()
     {
         JMenu menuSales=new JMenu("Sales");
         jmb.add(menuSales);

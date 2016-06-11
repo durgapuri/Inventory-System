@@ -9,57 +9,37 @@ import java.util.*;
 import javax.swing.table.*;
 import javax.swing.table.DefaultTableModel.*;
 public class DeleteSupplierClass {
-    //String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
-    String s;
-    int deleted;
-    JPanel jpn=new JPanel(new BorderLayout());
-    Connection con=null;
-    Statement stm=null;
+
+    private String s;
+    private int deleted;
+    private JPanel jpn=new JPanel(new BorderLayout());
+    private Connection con=null;
+    private Statement stm=null;
     
-    JFrame jfrm1=new JFrame("Delete Supplier Details");
-    JPanel jpan=new JPanel();
-    JLabel supNameLabel=new JLabel("Supplier Id");
-    JButton jbn=new JButton("Delete");
-    ResultSet rs=null;
-      private String [] supDetails= new String[4];
-    final JComboBox jComboBox1=new JComboBox();
-     private DefaultTableModel tblModel;
-     private JTable table= new JTable(tblModel);
+    private JFrame jfrm1=new JFrame("Delete Supplier Details");
+    private JPanel jpan=new JPanel();
+    private JLabel supNameLabel=new JLabel("Supplier Id");
+    private JButton jbn=new JButton("Delete");
+    private ResultSet rs=null;
+    private String [] supDetails= new String[4];
+    private final JComboBox jComboBox1=new JComboBox();
+    private DefaultTableModel tblModel;
+    private JTable table= new JTable(tblModel);
     private JScrollPane scrollPane = new JScrollPane(table);
     
+	
     public DeleteSupplierClass(Connection con)
     {   
         this.con=con;
         setLayoutBoundaries();
-        
-        /* try
-    {
-            Class.forName(driver);
-            con=DriverManager.getConnection(source);
-            System.out.println("connected successfully");
-            
-    }
-        catch(ClassNotFoundException e)
-        {   System.err.println("Failed To Load Driver");
-            System.out.println(e);
-            System.exit(1);
-        }
-        catch(SQLException e)
-        {   System.err.println("Unable To Connect");
-            System.out.println(e);
-            System.exit(1);
-        }*/
-         System.out.println("reached");
-         addComponents();
-         addingToComboBox();
-         delete();
+        addComponents();
+        addingToComboBox();
+        delete();
          
     }
     public void setLayoutBoundaries()
     {   
         jpan.setLayout(null);
-        jfrm1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jfrm1.setSize(700,300);
         supNameLabel.setBounds(100,50,150,25);
         jComboBox1.setBounds(200,50,100,25);
@@ -79,7 +59,7 @@ public class DeleteSupplierClass {
         jpan.add(jbn);
         jpn.add(scrollPane);
         table.getTableHeader().setReorderingAllowed(false);
-        jfrm1.setLocationRelativeTo(null);   // Used it place Jframe on center of screen , you can use it in other modules too
+        jfrm1.setLocationRelativeTo(null);   
         jfrm1.setVisible(true);
         
     }
@@ -98,7 +78,7 @@ public class DeleteSupplierClass {
             }
         
         
-        //s=String.valueOf(jComboBox1.getSelectedItem());
+        
         jComboBox1.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae){
                 System.out.println("entered");
@@ -118,7 +98,13 @@ public class DeleteSupplierClass {
             System.out.println(e);
         }
         
-    }  private void setColumns() {
+    }  
+	
+	
+	
+	
+	
+	private void setColumns() {
         tblModel.setColumnCount(0);
         tblModel.addColumn("SUPPLIER Id");
         tblModel.addColumn("SUPPLIER NAME");
@@ -127,6 +113,12 @@ public class DeleteSupplierClass {
         tblModel.addColumn("PHONE NUMBER");
        
        }
+	   
+	   
+	   
+	   
+	   
+	   
     public void viewDetailsOfSupplier(String s)
     {  tblModel = (DefaultTableModel) table.getModel();
         setColumns();
@@ -150,7 +142,13 @@ public class DeleteSupplierClass {
         stmt.close();
        }catch(Exception e){
                 System.out.println(e);
-        }}
+        }
+	}
+   
+   
+   
+   
+   
    
     public void delete()
     { jbn.addActionListener(new ActionListener(){
@@ -168,15 +166,11 @@ public class DeleteSupplierClass {
                 catch(Exception e)
                 {
                     System.out.println(e);
-                    JOptionPane.showMessageDialog(null,"Unable To Delete");
+                    JOptionPane.showMessageDialog(null,"Unable To Delete","",JOptionPane.ERROR_MESSAGE);
                 }
             }
         
     });
     }
-    /*public static void main(String args[])
-    {
-        new DeleteSupplierClass();
-    }*/
     
 }

@@ -1,81 +1,71 @@
-
 package EmployeePackage;
+
 import java.sql.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
 public class AddEmployeeClass {
-    String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
-    Connection con=null;
-    JFrame jfrm1=new JFrame("Add New Item");
-    JPanel jpan=new JPanel();
-    JLabel empIdLabel=new JLabel("Employee ID");
-    JLabel empfNameLabel=new JLabel("First Name");
-    JLabel empmNameLabel=new JLabel("Middle Name");
-    JLabel emplNameLabel=new JLabel("LastName");
-    JLabel addressLabel=new JLabel("Address");
-    JLabel phoneNoLabel=new JLabel("Phone No");
-    JLabel emailLabel=new JLabel("Email ID");
+
+    private Connection con=null;
+    private JFrame jfrm1=new JFrame("Add New Employee");
+    private JPanel jpan=new JPanel();
+	
+    private JLabel empIdLabel=new JLabel("Employee ID*"),
+			       empfNameLabel=new JLabel("First Name*"),
+				   empmNameLabel=new JLabel("Middle Name"),
+				   emplNameLabel=new JLabel("LastName"),
+				   addressLabel=new JLabel("Address*"),
+				   phoneNoLabel=new JLabel("Phone No*"),
+				   emailLabel=new JLabel("Email ID*");
     
-    JTextField textempId = new JTextField(10);
-    JTextField textempfName = new JTextField(10);
-    JTextField textempmName = new JTextField(10);
-    JTextField textemplName = new JTextField(10);
-    JTextField textaddress = new JTextField(10);
-    JTextField textphoneNo = new JTextField(10);
-    JTextField textemail = new JTextField(10);
-    JButton jbn=new JButton("ADD");
-        
-    public AddEmployeeClass()
+    private JTextField textempId = new JTextField(10),
+					   textempfName = new JTextField(10),
+					   textempmName = new JTextField(10),
+			           textemplName = new JTextField(10),
+					   textaddress = new JTextField(10),
+					   textphoneNo = new JTextField(10),
+					   textemail = new JTextField(10);
+					   
+    private JButton jbn=new JButton("ADD");
+    
+	public AddEmployeeClass(){}
+    public AddEmployeeClass(Connection con)
     {
+		this.con=con;
        setLayoutBoundaries(); 
-       try
-    {
-            Class.forName(driver);
-            con=DriverManager.getConnection(source);
-            System.out.println("connected successfully");
-            
-    }
-        catch(ClassNotFoundException e)
-        {   System.err.println("Failed To Load Driver");
-            System.out.println(e);
-            System.exit(1);
-        }
-        catch(SQLException e)
-        {   System.err.println("Unable To Connect");
-            System.out.println(e);
-            System.exit(1);
-        }
-       addingItemFunction();
-       addComponents();
-        
-        
+       addingEmployeeFunction();
+       addComponents();  
         
     }
-    public void addingItemFunction()
+	
+	
+    public void addingEmployeeFunction()
     {                   
 
         jbn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {   System.out.println("button working");
-                if(ItemAdded()==1)
+                if(EmployeeAdded()==1)
                 {
-                   JOptionPane.showMessageDialog(null,"Item Added");
+                   JOptionPane.showMessageDialog(null,"Employee details added");
                    jfrm1.dispose();
                 }
                 else
-               {   JOptionPane.showMessageDialog(null,"Item not Added");
+               {  
                }
             }
         });
     }
+	
+	
     public void setLayoutBoundaries()
     {  
         jpan.setLayout(null);
+        
         jfrm1.setSize(500,500);
-        jfrm1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jfrm1.setLocationRelativeTo(null);
+      
         empIdLabel.setBounds(50,100,100,25);
         empfNameLabel.setBounds(50,130,100,25);
         empmNameLabel.setBounds(50,160,150,25);
@@ -92,7 +82,11 @@ public class AddEmployeeClass {
         textemail.setBounds(200,280,150,25);
         jbn.setBounds(300,320,100,30);
     }
-    public int ItemAdded()
+	
+	
+	
+
+    public int EmployeeAdded()
     {   Statement stm=null;
         ResultSet rs=null;
         String sql=null;
@@ -105,9 +99,19 @@ public class AddEmployeeClass {
             String mName=textempmName.getText().trim();
             String lName=textemplName.getText().trim();
             String address=textaddress.getText().trim();
-            String phoneNo=textphoneNo.getText().trim();
-            String email=textemail.getText().trim();
+           String phoneNo="";
+            String email="";
             System.out.println("values taken");
+            if(id.isEmpty() || fName.isEmpty() || address.isEmpty() || phoneNo.isEmpty() || email.isEmpty())
+            {
+                JOptionPane.showMessageDialog(null,"* fields are mandatory.Please fill the details.");
+                return 0;
+            }
+             if(verifyPhoneNo(phoneNoLabel.getText().trim()) && verifyEmailId(emailLabel.getText().trim())){
+                   
+                   phoneNo=phoneNoLabel.getText().trim();
+                   email=emailLabel.getText().trim();
+            }
             sql="INSERT INTO `employee`(empId,fName,mName,lName,address,phoneNo,emailId) VALUES ('"+id+"','"+fName+"','"+mName+"','"+lName+"','"+address+"','"+phoneNo+"','"+email+"')";
             
             System.out.println(sql);
@@ -121,6 +125,28 @@ public class AddEmployeeClass {
             return 0;
         }
     }
+	 boolean verifyPhoneNo(String No){
+	if(!(No.length()==10)){
+            JOptionPane.showMessageDialog(null,"Incorrect Phone No : Phone no must be of 10 digit","Wrong Phone No",JOptionPane.ERROR_MESSAGE);
+            return false;
+	}
+	if(!(No.chars().allMatch( Character::isDigit ))){
+            JOptionPane.showMessageDialog(null,"Incorrect Phone No : Phone no must be only numeric","Wrong Phone No",JOptionPane.ERROR_MESSAGE);
+            return false;
+	}
+        return true;
+         }
+        boolean verifyEmailId(String emailid){
+	if(!(org.apache.commons.validator.routines.EmailValidator.getInstance().isValid(emailid))){ 
+		JOptionPane.showMessageDialog(null,"Incorrect Email ID: Please enter correct emailid"   
+									,"Email ID",JOptionPane.ERROR_MESSAGE);
+		return false;
+	}
+	return true;
+}
+	
+	
+	
     public void addComponents()
     {
         jpan.add(empIdLabel);
@@ -142,10 +168,6 @@ public class AddEmployeeClass {
         jfrm1.setVisible(true);
         
     }
-    /*public static void main(String args[])
-    {
-        new AddEmployeeClass();
-    }*/
     
     
 }

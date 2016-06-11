@@ -11,19 +11,18 @@ import java.text.SimpleDateFormat;
 
 public class UpdateCustomerClass {
     
-   //String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-   //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+
     private Connection con=null;
     private JFrame jfrm1=new JFrame("Update Customer");
     private JPanel jpan=new JPanel();
     private JLabel cusPhnLabel=new JLabel("Customer Phone No");
-    private JLabel cusNameLabel=new JLabel("Customer Name");
-    private JLabel cusAddrLabel=new JLabel("Customer Address");
+    private JLabel cusNameLabel=new JLabel("Customer Name*");
+    private JLabel cusAddrLabel=new JLabel("Customer Address*");
     private JLabel cusEmailIdLabel=new JLabel("Customer Email Id");
     private String x;
     
     private JComboBox jcom=new JComboBox();
-    private DateFormat format = new SimpleDateFormat("MM/DD/YYYY"); //display your format.
+    private DateFormat format = new SimpleDateFormat("MM/DD/YYYY"); 
     
     
     private JTextField textPhn = new JTextField(10);
@@ -33,43 +32,24 @@ public class UpdateCustomerClass {
    
     
     private JButton jbn=new JButton("UPDATE");
-        
+    
+	
     public UpdateCustomerClass(Connection con)
     {
-        this.con=con;
+       
+       this.con=con;
        setLayoutBoundaries(); 
-       addComponents();
-       /*try
-    {
-            Class.forName(driver);
-            con=DriverManager.getConnection(source);
-            System.out.println("connected successfully");
-            
-    }
-        catch(ClassNotFoundException e)
-        {   System.err.println("Failed To Load Driver");
-            System.out.println(e);
-            System.exit(1);
-        }
-        catch(SQLException e)
-        {   System.err.println("Unable To Connect");
-            System.out.println(e);
-            System.exit(1);
-        }*/
-     
+       addComponents();    
        combox();
        updatingCustomerFunction();
-       
-        
-        
+
         
     }
+	
+	
     public void combox(){
         
-        
-        
-        
-        try
+    try
         {
             Statement stm=con.createStatement();
             ResultSet rs = stm.executeQuery("select phoneNo from customer");
@@ -88,21 +68,19 @@ public class UpdateCustomerClass {
                 x=String.valueOf(jcom.getSelectedItem());
                  fillDetail(x);
              
-                        
-                
             } 
         });
             
-           
-            
-           
-            rs.close();
+        rs.close();
         }
         catch(Exception e)
         {
             System.out.println(e);
         }
     }
+	
+	
+	
     public void fillDetail(String x){
         try{
         Statement st = con.createStatement();
@@ -126,9 +104,7 @@ public class UpdateCustomerClass {
                 while(rs2.next()){
                     String value = rs2.getString("emailId");
                     textEmail.setText(value); 
-                }
-               System.out.println("jcud");
-             
+                }     
               
             
             }catch(Exception ae){
@@ -136,7 +112,11 @@ public class UpdateCustomerClass {
             }
         
     }
-   public void updatingCustomerFunction()
+	
+	
+	
+	
+public void updatingCustomerFunction()
     {                   
 
         jbn.addActionListener(new ActionListener(){
@@ -145,21 +125,29 @@ public class UpdateCustomerClass {
                 if(ItemUpdated()==1)
                 {
                    JOptionPane.showMessageDialog(null,"Item Updated");
-                   
+                   jfrm1.dispose();
                 }
                 else
-               {   JOptionPane.showMessageDialog(null,"Item not Updated");
+               {   
                }
-                jfrm1.dispose();
+                
             }
         });
     }
+	
+	
+	
+	
+	
+	
+	
     public void setLayoutBoundaries()
     {  
         jpan.setLayout(null);
         jfrm1.setSize(500,400);
         jfrm1.add(jpan);
         jfrm1.setVisible(true);
+        jfrm1.setLocationRelativeTo(null);
         cusPhnLabel.setBounds(50,100,120,25);
         cusNameLabel.setBounds(50,130,120,25);
         cusAddrLabel.setBounds(50,160,120,25);
@@ -175,6 +163,13 @@ public class UpdateCustomerClass {
         
        
     }
+	
+	
+	
+	
+	
+	
+	
     public int ItemUpdated()
     {   Statement stm=null;
         ResultSet rs=null;
@@ -188,8 +183,19 @@ public class UpdateCustomerClass {
             String addr=textAddr.getText().trim();
             System.out.println(addr);
             String email=textEmail.getText().trim();
+             if(name.isEmpty() || addr.isEmpty() ){
+                JOptionPane.showMessageDialog(null,"* fields are mandatory.Please fill the details","",JOptionPane.ERROR_MESSAGE);
+                return 0;
+            }
+              if(verifyEmailId(textEmail.getText().trim())){
+                   
+                   
+                   email=textEmail.getText().trim();
+            }
+            else{
+                return 0;
+            }
             
-
             PreparedStatement ps = con.prepareStatement(
                             "UPDATE customer SET cusName = ?, address = ? , emailId = ?" + "WHERE phoneNo = ? ");
  
@@ -212,6 +218,20 @@ public class UpdateCustomerClass {
             return 0;
         }
     }
+	boolean verifyEmailId(String emailid){
+	if(emailid.isEmpty())
+            return true;
+         if(!(org.apache.commons.validator.routines.EmailValidator.getInstance().isValid(emailid))){ 
+		JOptionPane.showMessageDialog(null,"Incorrect Email ID: Please enter correct emailid"   
+									,"Email ID",JOptionPane.ERROR_MESSAGE);
+		return false;
+	}
+	return true;
+        }
+	
+	
+	
+	
     public void addComponents()
     {
         jpan.add(cusPhnLabel);
@@ -228,13 +248,10 @@ public class UpdateCustomerClass {
         jpan.add(jcom);
         
         jfrm1.setVisible(true);
-        jfrm1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
         
     }
-   /* public static void main(String args[])
-    {
-        new UpdateCustomerClass();
-    }*/
+
     
 } 
 

@@ -8,8 +8,6 @@ import java.awt.event.*;
 
 public class UpdateItemClass {
     
-   // String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-   // String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
     
     private Connection con=null;
     private JFrame jfrm1=new JFrame("Update Item");
@@ -29,43 +27,23 @@ public class UpdateItemClass {
     private JTextField textItemStock = new JTextField(10);
     private JTextField textItemPrice = new JTextField(10);
     private JButton jbn=new JButton("UPDATE");
-        
+    
+	
+	
     public UpdateItemClass(Connection con)
     {
-        this.con=con;
-       setLayoutBoundaries(); 
-         addComponents();
-      /* try
-    {
-            Class.forName(driver);
-            con=DriverManager.getConnection(source);
-            System.out.println("connected successfully");
-            
-    }
-        catch(ClassNotFoundException e)
-        {   System.err.println("Failed To Load Driver");
-            System.out.println(e);
-            System.exit(1);
-        }
-        catch(SQLException e)
-        {   System.err.println("Unable To Connect");
-            System.out.println(e);
-            System.exit(1);
-        }*/
-     
-       combox();
-       updatingItemFunction();
-       
-        
-        
+         this.con=con;
+        setLayoutBoundaries(); 
+        addComponents();  
+	combox();
+	updatingItemFunction();        
         
     }
+	
+	
     public void combox(){
         
-        
-        
-        
-        try
+    try
         {
             Statement stm=con.createStatement();
             ResultSet rs = stm.executeQuery("select itemId from item");
@@ -74,7 +52,6 @@ public class UpdateItemClass {
             String s= rs.getString("itemId");
             System.out.println(s);
             jcom.addItem(s);
-            
             
         }
             
@@ -89,16 +66,16 @@ public class UpdateItemClass {
             } 
         });
             
-           
-            
-           
-            rs.close();
+        rs.close();
         }
         catch(Exception e)
         {
             System.out.println(e);
         }
     }
+	
+	
+	
     public void fillDetail(String x){
         try{
         Statement st = con.createStatement();
@@ -110,21 +87,20 @@ public class UpdateItemClass {
                      
                 }
                 
-                
-          String itemType = "Select itemType from item where itemId= '" +x+ "'";
+        String itemType = "Select itemType from item where itemId= '" +x+ "'";
                 ResultSet rs1 = st.executeQuery(itemType);
                 while(rs1.next()){
                     String value = rs1.getString("itemType");
                     textItemType.setText(value); 
                 }
-            String itemCompany = "Select itemCompanyName from item where itemId= '" +x+ "'";
+        String itemCompany = "Select itemCompanyName from item where itemId= '" +x+ "'";
                 ResultSet rs2 = st.executeQuery(itemCompany);
                 while(rs2.next()){
                     String value = rs2.getString("itemCompanyName");
                     textItemCompanyName.setText(value); 
                 }
-               System.out.println("jcud");
-             String itemStock = "Select itemStock from stock where itemId= '" +x+ "'";
+               
+        String itemStock = "Select itemStock from stock where itemId= '" +x+ "'";
             
                 ResultSet rs3 = st.executeQuery(itemStock);
                 while(rs3.next()){
@@ -132,7 +108,8 @@ public class UpdateItemClass {
                     System.out.println("ooo"+id);
                     textItemStock.setText(String.valueOf(id)) ; 
                 }
-            String itemPrice="Select itemPrice from stock where itemId= '" +x+ "'";
+        
+        String itemPrice="Select itemPrice from stock where itemId= '" +x+ "'";
                 ResultSet rs4 = st.executeQuery(itemPrice);
                 while(rs4.next()){
                     int a=Integer.parseInt(rs4.getString("itemPrice"));
@@ -144,6 +121,11 @@ public class UpdateItemClass {
             }
         
     }
+	
+	
+	
+	
+	
     public void updatingItemFunction()
     {                   
 
@@ -153,21 +135,25 @@ public class UpdateItemClass {
                 if(ItemUpdated()==1)
                 {
                    JOptionPane.showMessageDialog(null,"Item Updated");
-                   
+                   jfrm1.dispose();
                 }
                 else
-               {   JOptionPane.showMessageDialog(null,"Item not Updated");
+               {   
                }
-                jfrm1.dispose();
+                
             }
         });
     }
-    public void setLayoutBoundaries()
+	
+	
+	
+public void setLayoutBoundaries()
     {  
         jpan.setLayout(null);
         jfrm1.setSize(500,400);
         jfrm1.add(jpan);
         jfrm1.setVisible(true);
+        jfrm1.setLocationRelativeTo(null);
         itemIdLabel.setBounds(50,100,100,25);
         itemNameLabel.setBounds(50,130,100,25);
         itemTypeLabel.setBounds(50,160,100,25);
@@ -182,8 +168,11 @@ public class UpdateItemClass {
         textItemPrice.setBounds(200,250,150,25);
         jbn.setBounds(300,300,100,30);
     }
-    public int ItemUpdated()
-    {   Statement stm=null;
+	
+	
+ public int ItemUpdated()
+    {   
+        Statement stm=null;
         ResultSet rs=null;
         String sql=null;
         int count=0;
@@ -197,6 +186,28 @@ public class UpdateItemClass {
             String itemStock=textItemStock.getText().trim();
             String itemPrice=textItemPrice.getText().trim();
             System.out.println("values taken");
+            if(itemName.isEmpty() || itemType.isEmpty() || itemCompanyName.isEmpty()|| itemStock.isEmpty() || itemPrice.isEmpty())
+            {
+                JOptionPane.showMessageDialog(null,"All details are mandatory.Please fill the details","",JOptionPane.ERROR_MESSAGE);
+                return 0;
+            }
+            boolean number=false;
+            boolean number1=false;
+            
+            for (char c : itemPrice.toCharArray()){
+            if (Character.isDigit(c))
+                 number=true;
+            }
+            
+            for (char ch : itemStock.toCharArray()){
+                    if (Character.isDigit(ch))
+                        number1=true;
+            }
+            if(!number || !number1)
+            {
+                JOptionPane.showMessageDialog(null,"Item price and stock must be an integer","",JOptionPane.ERROR_MESSAGE);
+                return 0;
+            }
             
              PreparedStatement ps = con.prepareStatement(
                             "UPDATE item SET itemName = ?, itemType = ? , itemCompanyName = ? " + "WHERE itemId = ? ");
@@ -229,7 +240,9 @@ public class UpdateItemClass {
             return 0;
         }
     }
-    public void addComponents()
+	
+	
+public void addComponents()
     {
         jpan.add(itemIdLabel);
         jpan.add(itemNameLabel);
@@ -246,13 +259,9 @@ public class UpdateItemClass {
         jpan.add(jcom);
         
         jfrm1.setVisible(true);
-        jfrm1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       
         
     }
-   /* public static void main(String args[])
-    {
-        new UpdateItemClass();
-    }*/
     
 } 
 

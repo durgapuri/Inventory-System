@@ -9,37 +9,23 @@ import javax.swing.table.*;
 import java.util.*;
 
 public class ViewStockClass {
-    //String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
-   private  Connection con=null;
+
+    private  Connection con=null;
     private JFrame jfrm3=new JFrame("View Stock Details");
     
-    private JPanel jpan=new JPanel();
+   
     
     public ViewStockClass(Connection con){
+        
         this.con=con;
         jfrm3.setSize(500,300);
         jfrm3.setVisible(true);
-        /*try
-    {
-            Class.forName(driver);
-            con=DriverManager.getConnection(source);
-            System.out.println("connected successfully");
-            
+        jfrm3.setLocationRelativeTo(null);
+        viewStockDetail(con);
     }
-        catch(ClassNotFoundException e)
-        {   System.err.println("Failed To Load Driver");
-            System.out.println(e);
-            System.exit(1);
-        }
-        catch(SQLException e)
-        {   System.err.println("Unable To Connect");
-            System.out.println(e);
-            System.exit(1);
-        }*/
-        viewStockDetail();
-    }
-    public void viewStockDetail(){
+	
+	
+    public void viewStockDetail(Connection con){
         Vector columnNames = new Vector();
         Vector data = new Vector();
 
@@ -59,6 +45,7 @@ public class ViewStockClass {
                 row.addElement( rs.getObject(i) );
         }
         data.addElement( row );
+        System.out.println("prachee");
         }
         rs.close();
         stmt.close();
@@ -90,16 +77,7 @@ public class ViewStockClass {
         table.getTableHeader().setReorderingAllowed(false);
  }
     
-        
-    
-    
-   /* public static void main(String []args){
-        SwingUtilities.invokeLater(new Runnable(){
-            public void run(){
-                new ViewStockClass();
-            }
-        });
-    }*/
+
 
 }
 

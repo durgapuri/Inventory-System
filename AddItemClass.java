@@ -7,52 +7,36 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class AddItemClass {
-    //String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+
     private Connection con=null;
     private JFrame jfrm1=new JFrame("Add New Item");
     private JPanel jpan=new JPanel();
     private JLabel itemNameLabel=new JLabel("Item Name");
     private JLabel itemTypeLabel=new JLabel("Item Type");
-   private  JLabel itemCompanyNameLabel=new JLabel("Item Company Name");
+    private  JLabel itemCompanyNameLabel=new JLabel("Item Company Name");
     private JLabel itemStockLabel=new JLabel("Item Stock");
     private JLabel itemPriceLabel=new JLabel("Item Price");
     private JLabel suppId=new JLabel("Supplier ID");
     private JTextField textItemName = new JTextField(10);
-   private  JTextField textItemType = new JTextField(10);
+    private  JTextField textItemType = new JTextField(10);
     private JTextField textItemCompanyName = new JTextField(10);
     private JTextField textItemStock = new JTextField(10);
-   private  JTextField textItemPrice = new JTextField(10);
+    private  JTextField textItemPrice = new JTextField(10);
     private JTextField textSupId=new JTextField(10);
     private JButton jbn=new JButton("ADD");
-        
+	
+	
     public AddItemClass(Connection con)
     {
-        this.con=con;
+       this.con=con;
        setLayoutBoundaries(); 
-     /*  try
-    {
-            Class.forName(driver);
-            con=DriverManager.getConnection(source);
-            System.out.println("connected successfully");
-            
-    }
-        catch(ClassNotFoundException e)
-        {   System.err.println("Failed To Load Driver");
-            System.out.println(e);
-            System.exit(1);
-        }
-        catch(SQLException e)
-        {   System.err.println("Unable To Connect");
-            System.out.println(e);
-            System.exit(1);
-        }*/
        addingItemFunction();
-       addComponents();
-        
-        
+       addComponents();       
         
     }
+	
+	
+	
     public void addingItemFunction()
     {                   
 
@@ -61,21 +45,22 @@ public class AddItemClass {
             {   System.out.println("button working");
                 if(ItemAdded()==1)
                 {
-                   JOptionPane.showMessageDialog(null,"Item Added");
+                   JOptionPane.showMessageDialog(null,"Item Added successfully");
                    jfrm1.dispose();
                 }
                 else
-               {   JOptionPane.showMessageDialog(null,"Item not Added");
+               {  
                }
-                //jfrm1.dispose();
             }
         });
     }
-    public void setLayoutBoundaries()
+	
+	
+public void setLayoutBoundaries()
     {  
         jpan.setLayout(null);
         jfrm1.setSize(500,500);
-        
+        jfrm1.setLocationRelativeTo(null);
         itemNameLabel.setBounds(50,100,100,25);
         itemTypeLabel.setBounds(50,130,100,25);
         itemCompanyNameLabel.setBounds(50,160,150,25);
@@ -90,8 +75,12 @@ public class AddItemClass {
         textSupId.setBounds(200,250,150,25);
         jbn.setBounds(300,300,100,30);
     }
-    public int ItemAdded()
-    {   Statement stm=null;
+	
+	
+	
+public int ItemAdded()
+    {   
+        Statement stm=null;
         ResultSet rs=null;
         String sql=null;
         int count=0;
@@ -103,7 +92,29 @@ public class AddItemClass {
             String itemCompanyName=textItemCompanyName.getText().trim();
             String itemStock=textItemStock.getText().trim();
             String itemPrice=textItemPrice.getText().trim();
-            int supplierId=Integer.parseInt(textSupId.getText().trim());
+            String supplierId=textSupId.getText().trim();
+            if(itemName.isEmpty() || itemType.isEmpty() || itemCompanyName.isEmpty()|| itemStock.isEmpty() || itemPrice.isEmpty() || supplierId.isEmpty())
+            {
+                JOptionPane.showMessageDialog(null,"All details are mandatory.Please fill the details","",JOptionPane.ERROR_MESSAGE);
+                return 0;
+            }
+            
+           boolean number=false;
+           boolean number1=false;
+            for (char c : itemPrice.toCharArray()){
+            if (Character.isDigit(c))
+                 number=true;
+            }
+            
+            for (char ch : itemStock.toCharArray()){
+                    if (Character.isDigit(ch))
+                        number1=true;
+            }
+            if(!number || !number1)
+            {
+                JOptionPane.showMessageDialog(null,"Item price and stock must be an integer","",JOptionPane.ERROR_MESSAGE);
+                return 0;
+            }
             System.out.println("values taken");
             sql="INSERT INTO `item`(itemName,itemType,itemCompanyName) VALUES ('"+itemName+"','"+itemType+"','"+itemCompanyName+"')";
             
@@ -114,18 +125,17 @@ public class AddItemClass {
             rs=stm.executeQuery(sql1);
             System.out.println("exception");
             while(rs.next())
-            { int in=rs.getInt("itemId");
-              System.out.println(in);
+            { 
+                int in=rs.getInt("itemId");
+             
             
-            
-            sql = "INSERT INTO `stock`(itemId,itemStock,itemPrice,SupId) VALUES ("+in+","+itemStock+","+itemPrice+","+supplierId+")";
+            sql = "INSERT INTO `stock`(itemId,itemStock,itemPrice,SupId) VALUES ("+in+","+itemStock+","+itemPrice+",'"+supplierId+"')";
             System.out.println(sql);
             
             stm.executeUpdate(sql);
-            System.out.println("error");
-            
             
             }
+            
             rs.close();
             return 1;
         }
@@ -135,7 +145,9 @@ public class AddItemClass {
             return 0;
         }
     }
-    public void addComponents()
+	
+	
+public void addComponents()
     {
         jpan.add(itemNameLabel);
         jpan.add(itemTypeLabel);
@@ -151,12 +163,8 @@ public class AddItemClass {
         jpan.add(suppId);
         jpan.add(textSupId);
         jfrm1.add(jpan);
+        
         jfrm1.setVisible(true);
         
     }
-    /*public static void main(String args[])
-    {
-        new AddItemClass();
-    }*/
-    
 }

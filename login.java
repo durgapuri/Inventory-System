@@ -1,6 +1,5 @@
 package LoginPackage;
 
-
 import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
@@ -21,22 +20,23 @@ public class login {
     private JComboBox jcom;
     private JButton loginbutton,newUser;
     private String DBDriver="net.ucanaccess.jdbc.UcanaccessDriver",
-            DBSource="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb",x,empIdpass;
+            DBSource="jdbc:ucanaccess://C:\\Users\\me\\Desktop\\New folder\\databaseinv1.accdb",x,empIdpass;
     private Connection con;
     
     public login(){
     
     jfrm=new JFrame("Login ");
     jfrm.setSize(500,400);
-    //jfrm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     jfrm.setLocationRelativeTo(null);
     jfrm.setVisible(true);
+    jfrm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     placeComponents();
+    
     try{
         Class.forName(DBDriver);
         con=DriverManager.getConnection(DBSource);
         System.out.println("Connected Successfully");
-        placeComponents();
+        
         
     }
     catch(ClassNotFoundException e){
@@ -124,10 +124,11 @@ public class login {
              userClass user=new userClass(con);
              jfrm.dispose();
                        }  
-        });
-        
-        
+        });   
     }    
+	
+	
+	
     public void loginComponent(JPanel jpane,GridBagConstraints gb){
         
         loginbutton=new JButton("Login");
@@ -137,8 +138,9 @@ public class login {
         
         loginbutton.addActionListener(new ActionListener(){
           public void actionPerformed(ActionEvent ae){
-             
-              if(loginStatus()==1){
+             int value=loginStatus();
+              if(value==2){
+                  
                   JOptionPane.showMessageDialog(null,"Login Successful");
                   jfrm.dispose();
                   String x = jcom.getSelectedItem().toString();
@@ -153,37 +155,61 @@ public class login {
                       RetailShopClass rsemp=new RetailShopClass(empIdpass,con);
                   }
               }
-              else{
-                  JOptionPane.showMessageDialog(null,"Incorrect Employee ID or password or role\n\n"+
-												"Please enter correct login info.","Invalid User",JOptionPane.ERROR_MESSAGE);
+              else {
+                  if(value==1)
+                  {
+                    JOptionPane.showMessageDialog(null,"Your current status is Deactivated. Please wait till activation is granted","",JOptionPane.ERROR_MESSAGE);
                   jfrm.dispose();
-                  new login();
+                  new login();  
+                  }
+              else {
                   
+                  System.out.println("prachee");
               }
-          }  
+          } } 
         });
     }
     
+	
+	
         public int loginStatus(){
             
 	     Statement st=null;
-             ResultSet rs=null;
-             String sql=null;
+             ResultSet rs=null,rs1=null;
+             String sql=null,sql1=null;
            try{
                 int count=0;
                    
                 st=con.createStatement();
                 String emp=empidText.getText().trim(),
-		pass = new String(passText.getPassword()),
-		x = jcom.getSelectedItem().toString(),               
-		encpass=EncDecrptClass.encrypt(pass);
+					   pass = new String(passText.getPassword()),
+					   x = jcom.getSelectedItem().toString(),               
+					   encpass=EncDecrptClass.encrypt(pass);
+                String active="Activated";
                 sql="select empId,password from masterEmployee where empId= '"+emp+"' and password= '"+encpass+"' and role= '"+x+"'";
                 rs=st.executeQuery(sql);
-                while(rs.next()){
-                    count+=1;
+					while(rs.next()){
+						count+=1;
+					}
+                                        rs.close();
+                                        System.out.println("n"+count);
+                if(count==1)
+                {
+                    sql1="select empId from masterEmployee where empId= '"+emp+"'and ActiveStatus='"+active+"'";
+                    rs1=st.executeQuery(sql1);
+                    while(rs1.next()){
+                        count+=1;
+                    }
+                    return count;
                 }
-                empIdpass=emp;
-                return count;
+                else{
+                    
+                    JOptionPane.showMessageDialog(null,"Invalid employee id or password","",JOptionPane.ERROR_MESSAGE);
+                  //jfrm.dispose();
+                  //new login();
+                  return count;
+                }
+                
             }
                 catch(Exception e){
                     System.out.print(e);

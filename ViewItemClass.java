@@ -9,36 +9,23 @@ import javax.swing.table.*;
 import java.util.*;
 
 public class ViewItemClass {
-    //String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+
     private Connection con=null;
     private JFrame jfrm2=new JFrame("View Item");
     
     private JPanel jpan=new JPanel();
     
-    
+    public ViewItemClass(){}
     public ViewItemClass(Connection con){
         this.con=con;
         jfrm2.setSize(500,300);
         jfrm2.setVisible(true);
-  /*  try{
-        Class.forName(driver);
-        con=DriverManager.getConnection(source);
-        System.out.println("Connected Successfully");
-                
-    }
-    catch(ClassNotFoundException e){
-        System.err.println("Failed to load driver");
-        System.out.println(e);
-        System.exit(1);
-    }
-    catch(SQLException e){
-        System.err.println("Unnable to connect");
-        System.out.println(e);
-        System.exit(1);
-    }*/
-    addViewFunction();
-}
+        jfrm2.setLocationRelativeTo(null);
+		addViewFunction();
+	}
+	
+	
+	
     public void addViewFunction(){
        
         Vector columnNames = new Vector();
@@ -46,7 +33,7 @@ public class ViewItemClass {
 
         try {
 
-            String sql = "Select * from employee";
+            String sql = "Select * from item";
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery( sql );
             ResultSetMetaData md = rs.getMetaData();
@@ -91,16 +78,7 @@ public class ViewItemClass {
         table.getTableHeader().setReorderingAllowed(false);
  }
     
-        
-    
-    
-    /*public static void main(String []args){
-        SwingUtilities.invokeLater(new Runnable(){
-            public void run(){
-                new ViewItemClass();
-            }
-        });
-    }*/
+
 
 }
 

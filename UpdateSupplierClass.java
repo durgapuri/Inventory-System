@@ -10,8 +10,7 @@ import java.text.SimpleDateFormat;
 
 public class UpdateSupplierClass {
     
-    //String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+
     private Connection con=null;
     private JFrame jfrm1=new JFrame("Update Supplier");
     private JPanel jpan=new JPanel();
@@ -28,42 +27,21 @@ public class UpdateSupplierClass {
     
     private  JButton jbn=new JButton("UPDATE");
         
-    public UpdateSupplierClass(Connection con)
+    
+	
+	public UpdateSupplierClass(Connection con)
     {
         this.con=con;
        setLayoutBoundaries(); 
        addComponents();
-      /*try
-    {
-            Class.forName(driver);
-            con=DriverManager.getConnection(source);
-            System.out.println("connected successfully");
-            
-    }
-        catch(ClassNotFoundException e)
-        {   System.err.println("Failed To Load Driver");
-            System.out.println(e);
-            System.exit(1);
-        }
-        catch(SQLException e)
-        {   System.err.println("Unable To Connect");
-            System.out.println(e);
-            System.exit(1);
-        }
-     */
        combox();
-       updatingCustomerFunction();
-       
-        
-        
+       updatingSupplierFunction();           
         
     }
-    public void combox(){
+	
+public void combox(){
         
-        
-        
-        
-        try
+    try
         {
             Statement stm=con.createStatement();
             ResultSet rs = stm.executeQuery("select supId from supplierDetails");
@@ -88,16 +66,17 @@ public class UpdateSupplierClass {
         });
             
            
-            
-           
-            rs.close();
+        rs.close();
         }
         catch(Exception e)
         {
             System.out.println(e);
         }
     }
-    public void fillDetail(String x){
+	
+	
+	
+public void fillDetail(String x){
         try{
         Statement st = con.createStatement();
         
@@ -131,31 +110,36 @@ public class UpdateSupplierClass {
             }
         
     }
-   public void updatingCustomerFunction()
+	
+	
+ public void updatingSupplierFunction()
     {                   
 
         jbn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {   System.out.println("button working");
-                if(ItemUpdated()==1)
+                if(SupplierUpdated()==1)
                 {
-                   JOptionPane.showMessageDialog(null,"Item Updated");
-                   
+                   JOptionPane.showMessageDialog(null,"Supplier details updated");
+                   jfrm1.dispose();
                 }
                 else
-               {   JOptionPane.showMessageDialog(null,"Item not Updated");
+               {   
                }
-                jfrm1.dispose();
+                
             }
         });
     }
+	
+	
+	
     public void setLayoutBoundaries()
     {  
         jpan.setLayout(null);
         jfrm1.setSize(500,400);
         jfrm1.add(jpan);
         jfrm1.setVisible(true);
-        
+        jfrm1.setLocationRelativeTo(null);
         
         supId.setBounds(50,100,100,25);
         supNameLabel.setBounds(50,130,100,25);
@@ -169,7 +153,13 @@ public class UpdateSupplierClass {
         
         
     }
-    public int ItemUpdated()
+	
+	
+	
+	
+	
+	
+    public int SupplierUpdated()
     {   Statement stm=null;
         ResultSet rs=null;
         String sql=null;
@@ -183,7 +173,20 @@ public class UpdateSupplierClass {
             System.out.println(addr);
             String contact=textsupContact.getText().trim();
             
+            if(name.isEmpty()|| addr.isEmpty() || contact.isEmpty())
+            {
+                JOptionPane.showMessageDialog(null,"All details are mandatory.Please fill the details","",JOptionPane.ERROR_MESSAGE);
+                return 0;
+            }
             
+             if(verifyPhoneNo(textsupContact.getText().trim()) ){
+                   
+                   contact=textsupContact.getText().trim();
+                   
+            }
+             else{
+                 return 0;
+             }
             
 
             PreparedStatement ps = con.prepareStatement(
@@ -208,6 +211,24 @@ public class UpdateSupplierClass {
             return 0;
         }
     }
+	
+	boolean verifyPhoneNo(String No){
+		if(!(No.length()==10)){
+            JOptionPane.showMessageDialog(null,"Incorrect Phone No : Phone no must be of 10 digit","Wrong Phone No",JOptionPane.ERROR_MESSAGE);
+            return false;
+		}
+	
+		if(!(No.chars().allMatch( Character::isDigit ))){
+            JOptionPane.showMessageDialog(null,"Incorrect Phone No : Phone no must be only numeric","Wrong Phone No",JOptionPane.ERROR_MESSAGE);
+            return false;
+		}
+		return true;
+	}
+	
+	
+	
+	
+	
     public void addComponents()
     {
         jpan.add(supId);
@@ -221,13 +242,9 @@ public class UpdateSupplierClass {
         jpan.add(jcom);
         
         jfrm1.setVisible(true);
-        jfrm1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+                
     }
-    /*public static void main(String args[])
-    {
-        new UpdateSupplierClass();
-    }*/
+
     
 } 
 

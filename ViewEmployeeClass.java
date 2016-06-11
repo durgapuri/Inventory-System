@@ -8,37 +8,25 @@ import javax.swing.table.*;
 import java.util.*;
 
 public class ViewEmployeeClass {
-    //String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
-   private  Connection con=null;
+
+    private  Connection con=null;
     private JFrame jfrm3=new JFrame("View Employee Details");
     
     private JPanel jpan=new JPanel();
     
+	
     public ViewEmployeeClass(Connection con){
+       
         this.con=con;
         jfrm3.setSize(500,300);
         jfrm3.setVisible(true);
-       /* try
-    {
-            Class.forName(driver);
-            con=DriverManager.getConnection(source);
-            System.out.println("connected successfully");
-            
+        jfrm3.setLocationRelativeTo(null);
+        viewEmployeeDetail();
     }
-        catch(ClassNotFoundException e)
-        {   System.err.println("Failed To Load Driver");
-            System.out.println(e);
-            System.exit(1);
-        }
-        catch(SQLException e)
-        {   System.err.println("Unable To Connect");
-            System.out.println(e);
-            System.exit(1);
-        }*/
-        viewCustomerDetail();
-    }
-    public void viewCustomerDetail(){
+	
+	
+    public void viewEmployeeDetail(){
+        
         Vector columnNames = new Vector();
         Vector data = new Vector();
 
@@ -88,18 +76,7 @@ public class ViewEmployeeClass {
         scrollPane.setBounds(200,100,900,300);
         table.getTableHeader().setReorderingAllowed(false);
  }
-    
-        
-    
-    
-   /* public static void main(String []args){
-        SwingUtilities.invokeLater(new Runnable(){
-            public void run(){
-                new ViewEmployeeClass();
-            }
-        });
-    }*/
-
+ 
 }
     
     

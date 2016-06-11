@@ -3,6 +3,7 @@ package AdminPackage;
 
 import ItemPackage.AddItemClass;
 import ItemPackage.ViewItemClass;
+import PurchasePackage.ReportClass;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -18,41 +19,25 @@ import java.util.Calendar;
 import java.text.SimpleDateFormat;
 
 public class AdminClass {
-    //String driver="net.ucanaccess.jdbc.UcanaccessDriver";
-    //String source="jdbc:ucanaccess://E:\\tcs\\databaseinv.accdb";
+
     
-    Connection con=null;
-    ResultSet rs=null;
-    Statement stm=null;
+    private Connection con=null;
+    private ResultSet rs=null;
+    private Statement stm=null;
     
-    JFrame jfrm=new JFrame("Admin");
-    JMenuBar jmb=new JMenuBar();
-    String empIdreceived;
-    String date;
-    JLabel jbl=new JLabel();
-    JLabel jbl1=new JLabel("Last Access Time:");
+    private JFrame jfrm=new JFrame("Admin");
+    private JMenuBar jmb=new JMenuBar();
+    private String empIdreceived;
+    private String date;
+    private JLabel jbl=new JLabel();
+    private JLabel jbl1=new JLabel("Last Access Time:");
+    
     
     public AdminClass(String empIdreceived,Connection con)
     {   
         this.empIdreceived=empIdreceived;
         this.con=con;
-       /* try
-    {
-            Class.forName(driver);
-            con=DriverManager.getConnection(source);
-            System.out.println("connected successfully");
-            
-    }
-        catch(ClassNotFoundException e)
-        {   System.err.println("Failed To Load Driver");
-            System.out.println(e);
-            System.exit(1);
-        }
-        catch(SQLException e)
-        {   System.err.println("Unable To Connect");
-            System.out.println(e);
-            System.exit(1);
-        }*/
+         
         settingFrameBoundaries();
         displayDateTime();
         creatingEmployeeMenu();
@@ -61,28 +46,35 @@ public class AdminClass {
         creatingItemMenu();
         creatingStockMenu();
         creatingBillMenu();
+        creatingReportMenu();
         jfrm.setJMenuBar(jmb);
         jfrm.setVisible(true);
     }
+	
+	
+	
+	
+	
     public void settingFrameBoundaries()
     {
         jfrm.setSize(550,500);
+        jfrm.setLocationRelativeTo(null);
         jfrm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jfrm.setLayout(null);
         jfrm.setLocationRelativeTo(null);
     }
+	
+	
+	
+	
+	
+	
     public void creatingEmployeeMenu()
     {
         JMenu menuEmployee=new JMenu("Employee");
         jmb.add(menuEmployee);
-        JMenuItem addEmployee=new JMenuItem("Add Employee");
-        menuEmployee.add(addEmployee);
-         addEmployee.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent ae)
-            {
-               new AddEmployeeClass(con); 
-               
-        }});
+        
+      
         JMenuItem removeEmployee=new JMenuItem("Remove Employee");
         menuEmployee.add(removeEmployee);
          removeEmployee.addActionListener(new ActionListener(){
@@ -108,6 +100,11 @@ public class AdminClass {
                
         }});
     }
+	
+	
+	
+	
+	
     public void creatingCustomerMenu()
     {
         JMenu menuCust=new JMenu("Customer");
@@ -145,6 +142,12 @@ public class AdminClass {
                
         }});
     }
+	
+	
+	
+	
+	
+	
     public void creatingSupplierMenu()
     {
         JMenu menuSup=new JMenu("Supplier");
@@ -182,6 +185,11 @@ public class AdminClass {
                
         }});
     }
+	
+	
+	
+	
+	
     public void creatingItemMenu()
     {
         JMenu menuItem=new JMenu("Item");
@@ -219,6 +227,12 @@ public class AdminClass {
                
         }});
     }
+	
+	
+	
+	
+	
+	
     public void creatingStockMenu()
     {
         JMenu menuStock=new JMenu("Stock");
@@ -232,6 +246,8 @@ public class AdminClass {
                
         }});
     }
+	
+	
     public void creatingBillMenu()
     {
         JMenu menuBill=new JMenu("Bill");
@@ -241,7 +257,7 @@ public class AdminClass {
         createBill.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {
-               new CreateBillClass(); 
+               new CreateBillClass(con); 
                
         }});
         JMenuItem viewBill=new JMenuItem("View Bill");
@@ -253,22 +269,46 @@ public class AdminClass {
                
         }});
     }
-    public void creatingSalesMenu()
+    
+    public void creatingReportMenu(){
+        
+        JMenu menuReport=new JMenu("Report");
+        jmb.add(menuReport);
+        JMenuItem createReport=new JMenuItem("Generate Report");
+        menuReport.add(createReport);
+        createReport.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+           
+               new ReportClass(con); 
+               
+        }});
+        
+    }
+	
+     public void creatingSalesMenu()
     {
         JMenu menuSales=new JMenu("Sales");
         jmb.add(menuSales);
         JMenuItem viewSales=new JMenuItem("View Sales");
         menuSales.add(viewSales);
     }
+	
+	
+	
+	
+	
    public void displayDateTime()
-    {   try
-        {   System.out.println("entered");
+    {   
+	
+    try
+        {   
             stm=con.createStatement();
-            System.out.println("statement created");
+           
             String sql="select lastAccessTime from masterEmployee where empId='"+empIdreceived+"'";
-            rs=stm.executeQuery(sql);
+            rs=stm.executeQuery(sql);    
             while(rs.next())
-            {   System.out.println("getting");
+            {  
                 date=rs.getString("lastAccessTime");
             }
             rs.close();
@@ -293,10 +333,4 @@ public class AdminClass {
         }
         
     }
-    
-   
-   /* public static void main(String args[])
-    {
-        new AdminClass();
-    }*/
 }
